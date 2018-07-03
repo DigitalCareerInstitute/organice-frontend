@@ -1,21 +1,18 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
-import Expo from 'expo';
-import RegForm from './app/components/RegForm';
-import { StackNavigator } from 'react-navigation';
+import RegForm from './components/RegForm';
+import { createStackNavigator } from 'react-navigation';
 
-class RegisterScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Register'
-	};
+class main extends React.Component {
+
 	render() {
 		const { navigate } = this.props.navigation;
 		return (
 			<View style={styles.container}>
 				<RegForm />
 				<TouchableOpacity style={styles.button}>
-					<Text onPress={() => navigate('Home')} style={styles.btnText}>
-						Sign In
+					<Text style={styles.btnText}>
+						hii
 					</Text>
 				</TouchableOpacity>
 			</View>
@@ -23,48 +20,9 @@ class RegisterScreen extends React.Component {
 	}
 }
 
-class HomeScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Home'
-	};
-	render() {
-		const { navigate } = this.props.navigation;
-		return (
-			<View style={styles.regForm}>
-				{/* <RegForm /> */}
-				<Text onPress={() => navigate('Profile')}> Navigate To Profile</Text>
-			</View>
-		);
-	}
-}
-
-class ProfileScreen extends React.Component {
-	static navigationOptions = {
-		title: 'Profile'
-	};
-	render() {
-		const { navigate } = this.props.navigation;
-		return (
-			<View style={styles.regForm}>
-				{/* <RegForm onPress={() => navigate('Profile')} /> */}
-				<Text onPress={() => navigate('Home')} />
-			</View>
-		);
-	}
-}
-
-const NavigationApp = StackNavigator(
+const NavigationApp = createStackNavigator(
 	{
-		Register: { screen: RegisterScreen },
-		Home: { screen: HomeScreen },
-		Profile: { screen: ProfileScreen }
-	},
-	{
-		navigationOptions: {
-			headerStyle: {
-				marginTop: Expo.Constants.statusBarHeight
-			}
-		}
+		Main: { screen: main }
 	}
 );
 
