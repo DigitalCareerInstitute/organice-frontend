@@ -1,36 +1,63 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Button, View } from 'react-native';
 import RegForm from './components/RegForm';
-import { createStackNavigator } from 'react-navigation';
+import LogInForm from './components/LogInForm';
+import Camera from './components/CameraComponent';
+import { createSwitchNavigator } from 'react-navigation';
 
-class main extends React.Component {
-
+export default class App extends React.Component {
 	render() {
-		const { navigate } = this.props.navigation;
+		return <MyNavigator />;
+	}
+}
+
+class ScreenComponentHome extends React.Component {
+	render() {
 		return (
 			<View style={styles.container}>
 				<RegForm />
-				<TouchableOpacity style={styles.button}>
-					<Text style={styles.btnText}>
-						hii
-					</Text>
-				</TouchableOpacity>
+				<Button
+					title=" Register"
+					onPress={() => this.props.navigation.navigate('Register')}
+				/>
 			</View>
 		);
 	}
 }
 
-const NavigationApp = createStackNavigator(
-	{
-		Main: { screen: main }
-	}
-);
-
-export default class App extends React.Component {
+class ScreenComponentRegister extends React.Component {
 	render() {
-		return <NavigationApp />;
+		return (
+			<View style={styles.container}>
+				<LogInForm />
+				<Button
+					title="Please Log In"
+					onPress={() => this.props.navigation.navigate('logIn')}
+				/>
+			</View>
+		);
 	}
 }
+
+class ScreenComponentLogIn extends React.Component {
+	render() {
+		return (
+			<View style={styles.camera}>
+				<Camera />
+				<Button
+					title={'Home'}
+					onPress={() => this.props.navigation.navigate('Home')}
+				/>
+			</View>
+		);
+	}
+}
+
+const MyNavigator = createSwitchNavigator({
+	Home: ScreenComponentHome,
+	Register: ScreenComponentRegister,
+	logIn: ScreenComponentLogIn
+});
 
 const styles = StyleSheet.create({
 	container: {
@@ -41,15 +68,13 @@ const styles = StyleSheet.create({
 		backgroundColor: '#224a5f',
 		padding: 20
 	},
-	button: {
+	camera: {
+		flex: 1,
 		alignSelf: 'stretch',
-		alignItems: 'center',
-		padding: 20,
-		backgroundColor: '#0fa1ff',
-		marginTop: 30
-	},
-	btnText: {
-		color: '#fff',
-		fontWeight: 'bold'
+		// alignItems: 'center',
+		paddingTop: 24,
+		justifyContent: 'center',
+		backgroundColor: '#224a5f'
+		// padding: 20
 	}
 });

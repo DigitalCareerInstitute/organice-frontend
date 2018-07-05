@@ -7,21 +7,11 @@ import {
 	TextInput
 } from 'react-native';
 
-export default class RegForm extends React.Component {
+export default class LogInForm extends React.Component {
 	render() {
 		return (
 			<View style={styles.regForm}>
-				<Text style={styles.header}>Please Register</Text>
-				<TextInput
-					style={styles.textInput}
-					placeholder="First Name"
-					underlineColorAndroid={'transparent'}
-				/>
-				<TextInput
-					style={styles.textInput}
-					placeholder="Last Name"
-					underlineColorAndroid={'transparent'}
-				/>
+				<Text style={styles.header}>Log In</Text>
 				<TextInput
 					style={styles.textInput}
 					placeholder="Your Email"
@@ -32,11 +22,8 @@ export default class RegForm extends React.Component {
 					placeholder="Your Password"
 					underlineColorAndroid={'transparent'}
 				/>
-				<TouchableOpacity
-					onPress={() => navigate('Home')}
-					style={styles.button}
-				>
-					<Text style={styles.btnText}>Sign In</Text>
+				<TouchableOpacity style={styles.button}>
+					<Text style={styles.btnText}>Log In</Text>
 				</TouchableOpacity>
 			</View>
 		);
