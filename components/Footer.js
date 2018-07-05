@@ -18,6 +18,13 @@ export class Footer extends React.Component {
           tabBarLabel: 'List',
           tabBarIcon: <Icon name="list" size={35} color='red' />
         },
+      }, 
+      Scan: {
+        screen: Scan,
+        navigationOptions: {
+          tabBarLabel: 'Scan',
+          tabBarIcon: <Icon name="camera_alt" size={35} color='red' />
+        },
       },
     })
   }

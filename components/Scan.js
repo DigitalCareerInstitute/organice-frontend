@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { Camera, Permissions } from 'expo';
 
-export default class CameraComponent extends React.Component {
+class Scan extends React.Component {
 	state = {
 		hasCameraPermission: null,
 		type: Camera.Constants.Type.back,
@@ -121,3 +121,5 @@ const styles = StyleSheet.create({
 		borderRadius: 50 / 2
 	}
 });
+
+export default Scan;
