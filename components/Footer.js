@@ -1,31 +1,32 @@
-import React from 'react';
-import { TabNavigator, StackNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
+import React from "react";
+import { createBottomTabNavigator } from "react-navigation";
+import List from "./ListView";
+import Settings from "./Settings";
+import Scan from "./Scan";
+import { Icon } from "react-native-elements";
 
-export class Footer extends React.Component {
-  render() {
-    const Tabs = TabNavigator({
-      Settings: {
-        screen: SettingsStack,
-        navigationOptions: {
-          tabBarLabel: 'Settings',
-          tabBarIcon: <Icon name="account-circle" size={35} color='red' />,
-        },
-      },
-      List: {
-        screen: List,
-        navigationOptions: {
-          tabBarLabel: 'List',
-          tabBarIcon: <Icon name="list" size={35} color='red' />
-        },
-      }, 
-      Scan: {
-        screen: Scan,
-        navigationOptions: {
-          tabBarLabel: 'Scan',
-          tabBarIcon: <Icon name="camera_alt" size={35} color='red' />
-        },
-      },
-    })
+Footer = createBottomTabNavigator({
+  List: {
+    screen: List,
+    navigationOptions: {
+      tabBarLabel: "List",
+      tabBarIcon: <Icon name="list" size={35} color="#ff3d00" />
+    }
+  },
+  Scan: {
+    screen: Scan,
+    navigationOptions: {
+      tabBarLabel: "Scan",
+      tabBarIcon: <Icon name="camera" size={35} color="#ff3d00" />
+    }
+  },
+  Settings: {
+    screen: Settings,
+    navigationOptions: {
+      tabBarLabel: "Settings",
+      tabBarIcon: <Icon name="settings" size={35} color="#ff3d00" />
+    }
   }
-}
+});
+
+export default Footer;
