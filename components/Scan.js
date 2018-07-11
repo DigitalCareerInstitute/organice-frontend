@@ -2,6 +2,26 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Camera, Permissions } from "expo";
 
+const styles = StyleSheet.create({
+  bottomBar: {
+    height: 80,
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center"
+  },
+  bottomBarElements: {
+    width: 50,
+    height: 50
+  },
+  trigger: {
+    backgroundColor: "white",
+    width: 50,
+    height: 50,
+    borderRadius: 50 / 2
+  }
+});
+
 class Scan extends React.Component {
   state = {
     hasCameraPermission: null,
@@ -101,25 +121,5 @@ class PreviewShot extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  bottomBar: {
-    height: 80,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  bottomBarElements: {
-    width: 50,
-    height: 50
-  },
-  trigger: {
-    backgroundColor: "white",
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2
-  }
-});
 
 export default Scan;
