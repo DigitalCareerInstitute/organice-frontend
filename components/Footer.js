@@ -5,7 +5,7 @@ import Settings from "./Settings";
 import Scan from "./Scan";
 import SvgUri from "react-native-svg-uri";
 
-export default (Footer = createBottomTabNavigator(
+Footer = createBottomTabNavigator(
   {
     list: List,
     scan: Scan,
@@ -13,13 +13,10 @@ export default (Footer = createBottomTabNavigator(
   },
   {
     navigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ focused }) => {
+      tabBarIcon: () => {
         let routeName = navigation.state.routeName;
         let iconPath;
         let size = null;
-
-        // console.log(navigation.isFocused());
-        // console.log(routeName == "settings");
 
         if (routeName === "settings") {
           if (navigation.isFocused()) {
@@ -50,20 +47,6 @@ export default (Footer = createBottomTabNavigator(
         }
 
         return <SvgUri width={size} height={size} source={iconPath} />;
-
-        // focused.focused ? (
-        //   <SvgUri
-        //     width={size}
-        //     height={size}
-        //     source={require(`../icons/${iconPath}.svg`)}
-        //   />
-        // ) : (
-        //   <SvgUri
-        //     width={size}
-        //     height={size}
-        //     source={require(`../icons/${iconPath}.1.svg`)}
-        //   />
-        // );
       }
     }),
     tabBarOptions: {
@@ -74,4 +57,6 @@ export default (Footer = createBottomTabNavigator(
       }
     }
   }
-));
+);
+
+export default Footer;
