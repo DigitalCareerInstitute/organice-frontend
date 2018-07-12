@@ -1,15 +1,8 @@
 import React from "react";
-import {
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  List,
-  ListItem
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, List, ListItem } from "react-native";
 import { SearchBar, Icon } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
+import { data } from "../db.js";
 
 const styles = StyleSheet.create({
   background: {
@@ -56,83 +49,6 @@ const styles = StyleSheet.create({
 });
 
 class ListView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: [
-        {
-          title: "Postbank",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank1",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank2",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank3",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank4",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank5",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank6",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank7",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank8",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        },
-        {
-          title: "Postbank9",
-          label: "blalblala",
-          date: "12 Mar 2018",
-          description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-        }
-      ]
-    };
-  }
   static navigationOptions = {
     title: "List"
   };
@@ -159,8 +75,9 @@ class ListView extends React.Component {
             <Icon name="edit" type="material" color="#212121" />
           </View>
         </View>
+        {console.log("DATA", data)}
         <FlatList
-          data={this.state.data}
+          data={data}
           showsVerticalScrollIndicator={true}
           renderItem={({ item }) => (
             <View style={styles.listOuterContainer}>
@@ -184,14 +101,14 @@ class ListView extends React.Component {
                   </View>
                   <View>
                     <Text style={styles.listItemDescription}>
-                      {item.description}
+                      {item.content}
                     </Text>
                   </View>
                 </View>
               </View>
             </View>
           )}
-          keyExtractor={item => item.title}
+          keyExtractor={item => item._id}
         />
       </View>
     );

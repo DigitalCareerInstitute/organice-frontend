@@ -7,29 +7,6 @@ import {
   TextInput
 } from "react-native";
 
-class LogInForm extends React.Component {
-  render() {
-    return (
-      <View style={styles.regForm}>
-        <Text style={styles.header}>Log In</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Your Email"
-          underlineColorAndroid={"transparent"}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Your Password"
-          underlineColorAndroid={"transparent"}
-        />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.btnText}>Log In</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
-
 const styles = StyleSheet.create({
   regForm: {
     alignSelf: "stretch"
@@ -62,5 +39,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   }
 });
+
+class LogInForm extends React.Component {
+  render() {
+    return (
+      <View style={styles.regForm}>
+        <Text style={styles.header}>Log In</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Your Email"
+          underlineColorAndroid={"transparent"}
+        />
+        <TextInput
+          style={styles.textInput}
+          placeholder="Your Password"
+          underlineColorAndroid={"transparent"}
+        />
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.btnText}>Log In</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
 
 export default LogInForm;
