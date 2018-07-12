@@ -45,7 +45,6 @@ Footer = createBottomTabNavigator(
             size = 45;
           }
         }
-        
         return <SvgUri width={size} height={size} source={iconPath} />;
       }
     }),

@@ -13,7 +13,7 @@ class App extends React.Component {
 
   hideSplashScreen = () => {
     this.setState(state => {
-      state.loading = false;
+      state.loading = true;
       return state;
     });
   };
