@@ -19,9 +19,8 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    const that = this;
-    setTimeout(function() {
-      that.hideSplashScreen();
+    setTimeout(() => {
+      this.hideSplashScreen();
     }, 1000);
   }
 
