@@ -6,17 +6,18 @@ import { data } from "../db.js";
 
 const styles = StyleSheet.create({
   background: {
-    marginBottom: 100,
+    paddingBottom: 80,
     paddingTop: 24,
     backgroundColor: "#f9f9f9"
   },
   searchBarContainer: {
-    flex: 1
+    // height: 200,
+    // flex: 4
   },
   topIconsContainer: {
     flexDirection: "row",
     alignSelf: "flex-end",
-    padding: 10
+    padding: 2
   },
   topIcons: {
     paddingRight: 10
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   listItemTitle: {
-    fontSize: 15,
+    fontSize: 13,
     color: "#212121"
   },
   listItemDescription: {
@@ -75,39 +76,49 @@ class ListView extends React.Component {
             <Icon name="edit" type="material" color="#212121" />
           </View>
         </View>
-        {console.log("DATA", data)}
+        {/* {console.log("DATA", data)} */}
         <FlatList
           data={data}
-          showsVerticalScrollIndicator={true}
-          renderItem={({ item }) => (
-            <View style={styles.listOuterContainer}>
-              <View style={styles.listInnerContainer}>
-                <View style={{ alignSelf: "center" }}>
-                  <SvgUri
-                    width={60}
-                    height={60}
-                    source={require("../icons/label_03.svg")}
-                  />
-                </View>
-                <View style={{ flexShrink: 1 }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between"
-                    }}
-                  >
-                    <Text style={styles.listItemTitle}>{item.title}</Text>
-                    <Text style={styles.listItemDate}>{item.date}</Text>
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) => {
+            let iconPath;
+
+            if (item.category === "finance") {
+              iconPath = require("../icons/label_finance.svg");
+            } else if (item.category === "state") {
+              iconPath = require("../icons/label_state.svg");
+            } else if (item.category === "car_insurance") {
+              iconPath = require("../icons/label_car_insurance.svg");
+            } else if (item.category === "health") {
+              iconPath = require("../icons/label_health.svg");
+            }
+
+            return (
+              <View style={styles.listOuterContainer}>
+                <View style={styles.listInnerContainer}>
+                  <View style={{ alignSelf: "center", padding: 10 }}>
+                    <SvgUri width={40} height={40} source={iconPath} />
                   </View>
-                  <View>
-                    <Text style={styles.listItemDescription}>
-                      {item.content}
-                    </Text>
+                  <View style={{ flexShrink: 1 }}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between"
+                      }}
+                    >
+                      <Text style={styles.listItemTitle}>{item.title}</Text>
+                      <Text style={styles.listItemDate}>{item.date}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.listItemDescription}>
+                        {item.content}
+                      </Text>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          )}
+            );
+          }}
           keyExtractor={item => item._id}
         />
       </View>
