@@ -1,48 +1,61 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
 import List from './ListView';
-// import Photo from './Photo';
-// import GalleryScreen from './GalleryScreen';
 import Settings from './Settings';
 import Scan from './Scan';
-import { Icon } from 'react-native-elements';
+import SvgUri from 'react-native-svg-uri';
 
-Footer = createBottomTabNavigator({
-	List: {
-		screen: List,
-		navigationOptions: {
-			tabBarLabel: 'List',
-			atabBarIcon: <Icon name="list" size={35} color="#ff3d00" />
-		}
+Footer = createBottomTabNavigator(
+	{
+		list: List,
+		scan: Scan,
+		settings: Settings
 	},
-	Scan: {
-		screen: Scan,
-		navigationOptions: {
-			tabBarLabel: 'Scan',
-			tabBarIcon: <Icon name="camera" size={35} color="#ff3d00" />
-		}
-	},
-	Settings: {
-		screen: Settings,
-		navigationOptions: {
-			tabBarLabel: 'Settings',
-			tabBarIcon: <Icon name="settings" size={35} color="#ff3d00" />
+	{
+		navigationOptions: ({ navigation }) => ({
+			tabBarIcon: () => {
+				let routeName = navigation.state.routeName;
+				let iconPath;
+				let size = null;
+
+				if (routeName === 'settings') {
+					if (navigation.isFocused()) {
+						iconPath = require('../icons/settings.svg');
+						size = 45;
+					} else {
+						iconPath = require('../icons/settings.1.svg');
+						size = 45;
+					}
+				}
+				if (routeName === 'scan') {
+					if (navigation.isFocused()) {
+						iconPath = require('../icons/scan.1.svg');
+						size = 65;
+					} else {
+						iconPath = require('../icons/scan.svg');
+						size = 65;
+					}
+				}
+				if (routeName === 'list') {
+					if (navigation.isFocused()) {
+						iconPath = require('../icons/list.svg');
+						size = 45;
+					} else {
+						iconPath = require('../icons/list.1.svg');
+						size = 45;
+					}
+				}
+				return <SvgUri width={size} height={size} source={iconPath} />;
+			}
+		}),
+		tabBarOptions: {
+			showLabel: false,
+			style: {
+				backgroundColor: '#212121',
+				height: 65
+			}
 		}
 	}
-	// Photo: {
-	// 	screen: Photo,
-	// 	navigationOptions: {
-	// 		tabBarLabel: 'Photo',
-	// 		tabBarIcon: <Icon name="Photo" size={35} color="#ff3d00" />
-	// 	}
-	// }
-	// GalleryScreen: {
-	// 	screen: GalleryScreen,
-	// 	navigationOptions: {
-	// 		tabBarLabel: 'GalleryScreen',
-	// 		tabBarIcon: <Icon name="GalleryScreen" size={35} color="#ff3d00" />
-	// 	}
-	// }
-});
+);
 
 export default Footer;

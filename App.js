@@ -1,8 +1,32 @@
-import React from 'react';
-import Footer from './components/Footer';
+import React from "react";
+import Footer from "./components/Footer";
+import SplashScreen from "./components/SplashScreen";
 
-export default class App extends React.Component {
-	render() {
-		return <Footer />;
-	}
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false
+    };
+  }
+
+  hideSplashScreen = () => {
+    this.setState(state => {
+      state.loading = false;
+      return state;
+    });
+  };
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.hideSplashScreen();
+    }, 1000);
+  }
+
+  render() {
+    return this.state.loading ? <SplashScreen /> : <Footer />;
+  }
 }
+
+export default App;
