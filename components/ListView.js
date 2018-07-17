@@ -57,24 +57,41 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     fontSize: 20,
+    letterSpacing: 2,
     color: "#f9f9f9"
+  },
+  modalContentSelected: {
+    fontSize: 20,
+    letterSpacing: 2,
+    color: "#ff7539"
   }
 });
 
 class ListView extends React.Component {
-  state = {
-    modalSorting: false,
-    sort: "category"
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      modalSorting: true,
+      sort: "category",
+      data
+    };
+  }
+
   static navigationOptions = {
     title: "List"
   };
+
+  componentWillUpdate() {
+    //this.sortBy();
+  }
 
   setModalVisible(visible) {
     this.setState({ modalSorting: visible });
   }
 
-  render() {
+  sortBy() {
+    // console.log("sort", this.state.sort);
     if (this.state.sort === "date") {
       data.sort(function(a, b) {
         return a.date - b.date;
@@ -107,6 +124,23 @@ class ListView extends React.Component {
       });
     }
 
+    this.setState(state => {
+      state.data = data;
+      return state;
+    });
+  }
+
+  setStateSorting = sortParameter => {
+    this.setState(state => {
+      state.sort = sortParameter;
+      // console.log(state);
+      return state;
+    });
+
+    this.sortBy();
+  };
+
+  render() {
     return (
       <View style={styles.background}>
         <SearchBar
@@ -136,7 +170,8 @@ class ListView extends React.Component {
         </View>
         {/* {console.log("DATA", data)} */}
         <FlatList
-          data={data}
+          data={this.state.data}
+          extraData={this.state.sort}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             let iconPath;
@@ -203,14 +238,50 @@ class ListView extends React.Component {
               }}
             >
               <View>
-                <TouchableOpacity onPress={() => {}}>
-                  <Text style={styles.modalContent}>Label</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setStateSorting("category");
+                  }}
+                >
+                  <Text
+                    style={
+                      this.state.sort === "category"
+                        ? styles.modalContentSelected
+                        : styles.modalContent
+                    }
+                  >
+                    Label
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.modalContent}>Date</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setStateSorting("date");
+                  }}
+                >
+                  <Text
+                    style={
+                      this.state.sort === "date"
+                        ? styles.modalContentSelected
+                        : styles.modalContent
+                    }
+                  >
+                    Date
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                  <Text style={styles.modalContent}>Upcoming</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setStateSorting("title");
+                  }}
+                >
+                  <Text
+                    style={
+                      this.state.sort === "title"
+                        ? styles.modalContentSelected
+                        : styles.modalContent
+                    }
+                  >
+                    Title
+                  </Text>
                 </TouchableOpacity>
 
                 <TouchableHighlight
