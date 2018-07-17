@@ -6,7 +6,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "10 Mar 2018"
+    date: "1514851200"
   },
   {
     _id: "2",
@@ -15,7 +15,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "15 Apr 2018"
+    date: "1544832000"
   },
   {
     _id: "3",
@@ -24,7 +24,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "3 Jun 2018"
+    date: "1529539200"
   },
   {
     _id: "4",
@@ -33,7 +33,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "1 May 2018"
+    date: "1525046400"
   },
   {
     _id: "5",
@@ -42,7 +42,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "26 Aug 2018"
+    date: "1534636800"
   },
   {
     _id: "6",
@@ -51,7 +51,7 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "26 Aug 2018"
+    date: "1530576000"
   },
   {
     _id: "7",
@@ -60,6 +60,6 @@ export const data = [
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
-    date: "26 Aug 2018"
+    date: "1538784000"
   }
 ];

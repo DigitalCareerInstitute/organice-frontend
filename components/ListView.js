@@ -1,5 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList, List, ListItem } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  TouchableHighlight,
+  Modal
+} from "react-native";
 import { SearchBar, Icon } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
 import { data } from "../db.js";
@@ -46,16 +54,59 @@ const styles = StyleSheet.create({
   listItemDate: {
     fontSize: 10,
     color: "#ff7539"
+  },
+  modalContent: {
+    fontSize: 20,
+    color: "#f9f9f9"
   }
 });
 
 class ListView extends React.Component {
+  state = {
+    modalSorting: false,
+    sort: "category"
+  };
   static navigationOptions = {
     title: "List"
   };
 
+  setModalVisible(visible) {
+    this.setState({ modalSorting: visible });
+  }
+
   render() {
-    const { navigate } = this.props.navigation;
+    if (this.state.sort === "date") {
+      data.sort(function(a, b) {
+        return a.date - b.date;
+      });
+    } else if (this.state.sort === "title") {
+      data.sort(function compare(a, b) {
+        const titleA = a.title.toUpperCase().trim();
+        const titleB = b.title.toUpperCase().trim();
+
+        let comparison = 0;
+        if (titleA > titleB) {
+          comparison = 1;
+        } else if (titleA < titleB) {
+          comparison = -1;
+        }
+        return comparison;
+      });
+    } else if (this.state.sort === "category") {
+      data.sort(function compare(a, b) {
+        const categoryA = a.category.toUpperCase().trim();
+        const categoryB = b.category.toUpperCase().trim();
+
+        let comparison = 0;
+        if (categoryA > categoryB) {
+          comparison = 1;
+        } else if (categoryA < categoryB) {
+          comparison = -1;
+        }
+        return comparison;
+      });
+    }
+
     return (
       <View style={styles.background}>
         <SearchBar
@@ -66,15 +117,22 @@ class ListView extends React.Component {
           placeholder="Search.."
         />
         <View style={styles.topIconsContainer}>
-          <View style={styles.topIcons}>
+          <TouchableOpacity style={styles.topIcons}>
             <Icon name="filter-list" type="material" color="#212121" />
-          </View>
-          <View style={styles.topIcons}>
-            <Icon name="sort" type="material" color="#212121" />
-          </View>
-          <View style={styles.topIcons}>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.topIcons}>
+            <Icon
+              name="sort"
+              type="material"
+              color="#212121"
+              onPress={() => {
+                this.setModalVisible(true);
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.topIcons}>
             <Icon name="edit" type="material" color="#212121" />
-          </View>
+          </TouchableOpacity>
         </View>
         {/* {console.log("DATA", data)} */}
         <FlatList
@@ -95,7 +153,7 @@ class ListView extends React.Component {
 
             return (
               <View style={styles.listOuterContainer}>
-                <View style={styles.listInnerContainer}>
+                <TouchableOpacity style={styles.listInnerContainer}>
                   <View style={{ alignSelf: "center", padding: 10 }}>
                     <SvgUri width={40} height={40} source={iconPath} />
                   </View>
@@ -115,12 +173,57 @@ class ListView extends React.Component {
                       </Text>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             );
           }}
           keyExtractor={item => item._id}
         />
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center"
+          }}
+        >
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalSorting}
+            onRequestClose={() => {
+              alert("Modal has been closed.");
+            }}
+          >
+            <View
+              style={{
+                margin: 100,
+                backgroundColor: "#484848",
+                padding: 22,
+                borderRadius: 4,
+                alignItems: "center"
+              }}
+            >
+              <View>
+                <TouchableOpacity onPress={() => {}}>
+                  <Text style={styles.modalContent}>Label</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.modalContent}>Date</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.modalContent}>Upcoming</Text>
+                </TouchableOpacity>
+
+                <TouchableHighlight
+                  onPress={() => {
+                    this.setModalVisible(!this.state.modalSorting);
+                  }}
+                >
+                  <Text>Close</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        </View>
       </View>
     );
   }
