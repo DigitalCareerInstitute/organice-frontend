@@ -56,14 +56,22 @@ const styles = StyleSheet.create({
     color: "#ff7539"
   },
   modalContent: {
+    alignSelf: "center",
     fontSize: 20,
-    letterSpacing: 2,
-    color: "#f9f9f9"
+    color: "#484848",
+    paddingBottom: 8
   },
-  modalContentSelected: {
+  modalContentActive: {
+    alignSelf: "center",
     fontSize: 20,
-    letterSpacing: 2,
-    color: "#ff7539"
+    color: "#ff7539",
+    paddingBottom: 8
+  },
+  parentContainerCenter: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -152,10 +160,16 @@ class ListView extends React.Component {
         />
         <View style={styles.topIconsContainer}>
           <TouchableOpacity style={styles.topIcons}>
-            <Icon name="filter-list" type="material" color="#212121" />
+            <Icon
+              size={30}
+              name="filter-list"
+              type="material"
+              color="#212121"
+            />
           </TouchableOpacity>
           <TouchableOpacity style={styles.topIcons}>
             <Icon
+              size={30}
               name="sort"
               type="material"
               color="#212121"
@@ -165,7 +179,7 @@ class ListView extends React.Component {
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.topIcons}>
-            <Icon name="edit" type="material" color="#212121" />
+            <Icon size={30} name="edit" type="material" color="#212121" />
           </TouchableOpacity>
         </View>
         {/* {console.log("DATA", data)} */}
@@ -214,12 +228,7 @@ class ListView extends React.Component {
           }}
           keyExtractor={item => item._id}
         />
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center"
-          }}
-        >
+        <View>
           <Modal
             animationType="slide"
             transparent={true}
@@ -230,11 +239,19 @@ class ListView extends React.Component {
           >
             <View
               style={{
-                margin: 100,
-                backgroundColor: "#484848",
-                padding: 22,
-                borderRadius: 4,
-                alignItems: "center"
+                flex: 4,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginTop: 160,
+                marginBottom: 160,
+                marginLeft: 80,
+                marginRight: 80,
+                shadowColor: "#484848",
+                shadowOpacity: 0.8,
+                elevation: 1,
+                backgroundColor: "rgba(249,249,249, 0.95)",
+                borderRadius: 4
               }}
             >
               <View>
@@ -246,7 +263,7 @@ class ListView extends React.Component {
                   <Text
                     style={
                       this.state.sort === "category"
-                        ? styles.modalContentSelected
+                        ? styles.modalContentActive
                         : styles.modalContent
                     }
                   >
@@ -261,7 +278,7 @@ class ListView extends React.Component {
                   <Text
                     style={
                       this.state.sort === "date"
-                        ? styles.modalContentSelected
+                        ? styles.modalContentActive
                         : styles.modalContent
                     }
                   >
@@ -276,7 +293,7 @@ class ListView extends React.Component {
                   <Text
                     style={
                       this.state.sort === "title"
-                        ? styles.modalContentSelected
+                        ? styles.modalContentActive
                         : styles.modalContent
                     }
                   >
@@ -285,11 +302,17 @@ class ListView extends React.Component {
                 </TouchableOpacity>
 
                 <TouchableHighlight
+                  style={{ marginTop: 20, alignSelf: "center" }}
                   onPress={() => {
                     this.setModalVisible(!this.state.modalSorting);
                   }}
                 >
-                  <Text>Close</Text>
+                  <Icon
+                    size={40}
+                    name="check"
+                    type="evilicon"
+                    color="#484848"
+                  />
                 </TouchableHighlight>
               </View>
             </View>
