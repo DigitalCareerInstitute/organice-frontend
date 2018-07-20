@@ -1,79 +1,122 @@
-import React from "react";
+import React, { Component } from 'react';
 import {
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  TextInput
-} from "react-native";
+	StyleSheet,
+	Text,
+	View,
+	TextInput,
+	TouchableHighlight,
+	Alert
+} from 'react-native';
+import SvgUri from 'react-native-svg-uri';
 
-class RegForm extends React.Component {
-  render() {
-    return (
-      <View style={styles.regForm}>
-        <Text style={styles.header}>Please Register</Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder="First Name"
-          underlineColorAndroid={"transparent"}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Last Name"
-          underlineColorAndroid={"transparent"}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Your Email"
-          underlineColorAndroid={"transparent"}
-        />
-        <TextInput
-          style={styles.textInput}
-          placeholder="Your Password"
-          underlineColorAndroid={"transparent"}
-        />
-        <TouchableOpacity
-          onPress={() => navigate("Home")}
-          style={styles.button}
-        >
-          <Text style={styles.btnText}>Sign In</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+export default class RegForm extends Component {
+	constructor(props) {
+		super(props);
+		state = {
+			firstName: '',
+			lastName: '',
+			email: '',
+			password: '',
+			repeatPassword: ''
+		};
+	}
+
+	onClickListener = viewId => {
+		Alert.alert('Alert', 'Button pressed ' + viewId);
+	};
+
+	render() {
+		return (
+			<View style={styles.container}>
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.inputs}
+						placeholder="First Name"
+						keyboardType="text"
+						onChangeText={firstName => this.setState({ firstName })}
+					/>
+				</View>
+
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.inputs}
+						placeholder="last Name"
+						secureTextEntry="text"
+						onChangeText={lastName => this.setState({ lastName })}
+					/>
+				</View>
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.inputs}
+						placeholder="Email"
+						secureTextEntry="email-address"
+						onChangeText={email => this.setState({ email })}
+					/>
+				</View>
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.inputs}
+						placeholder="Password"
+						secureTextEntry={true}
+						onChangeText={password => this.setState({ password })}
+					/>
+				</View>
+				<View style={styles.inputContainer}>
+					<TextInput
+						style={styles.inputs}
+						placeholder="repeatPassword"
+						secureTextEntry={true}
+						onChangeText={repeatPassword => this.setState({ repeatPassword })}
+					/>
+				</View>
+
+				<TouchableHighlight
+					style={[styles.buttonContainer, styles.loginButton]}
+					onPress={() => this.onClickListener('login')}
+				>
+					<Text>Register</Text>
+				</TouchableHighlight>
+			</View>
+		);
+	}
 }
 
 const styles = StyleSheet.create({
-  regForm: {
-    alignSelf: "stretch"
-  },
-  header: {
-    fontSize: 20,
-    color: "#fff",
-    paddingBottom: 10,
-    marginBottom: 40,
-    borderBottomColor: "#199187",
-    borderBottomWidth: 1
-  },
-  textInput: {
-    alignSelf: "stretch",
-    height: 40,
-    marginBottom: 30,
-    color: "#fff",
-    borderBottomColor: "#f8f8f8",
-    borderBottomWidth: 1
-  },
-  button: {
-    alignSelf: "stretch",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: "#0fa1ff",
-    marginTop: 30
-  },
-  btnText: {
-    color: "#fff",
-    fontWeight: "bold"
-  }
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	inputContainer: {
+		borderBottomColor: '#000',
+		backgroundColor: '#FFFFFF',
+		borderBottomWidth: 1,
+		width: 250,
+		height: 45,
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	inputs: {
+		flex: 1,
+		alignSelf: 'stretch',
+		height: 40,
+		color: '#fff',
+		borderBottomColor: '#f8f8f8',
+		borderBottomWidth: 1
+	},
+	buttonContainer: {
+		height: 45,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		marginTop: 50,
+		marginBottom: 20,
+		width: 250
+	},
+	loginButton: {
+		backgroundColor: '#ff7539'
+	},
+	loginText: {
+		color: 'white'
+	}
 });
-
-export default RegForm;

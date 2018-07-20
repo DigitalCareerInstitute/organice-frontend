@@ -1,5 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from 'react-navigation';
+import LogIn from './LogInForm';
+import RegForm from './RegForm';
 import List from './ListView';
 import Settings from './Settings';
 import Scan from './Scan';
@@ -7,6 +9,7 @@ import SvgUri from 'react-native-svg-uri';
 
 Footer = createBottomTabNavigator(
 	{
+		Login: LogIn,
 		list: List,
 		scan: Scan,
 		settings: Settings
@@ -42,6 +45,24 @@ Footer = createBottomTabNavigator(
 						size = 45;
 					} else {
 						iconPath = require('../icons/list.1.svg');
+						size = 45;
+					}
+				}
+				if (routeName === 'Login') {
+					if (navigation.isFocused()) {
+						iconPath = require('../icons/logo.svg');
+						size = 45;
+					} else {
+						iconPath = require('../icons/logo_final_no_text.svg');
+						size = 45;
+					}
+				}
+				if (routeName === 'Register') {
+					if (navigation.isFocused()) {
+						iconPath = require('../icons/logo.svg');
+						size = 45;
+					} else {
+						iconPath = require('../icons/logo_final_no_text.svg');
 						size = 45;
 					}
 				}
