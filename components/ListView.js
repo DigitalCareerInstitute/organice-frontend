@@ -6,7 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
   TouchableHighlight,
-  Modal
+  Modal,
+  TextInput
 } from "react-native";
 import { SearchBar, Icon } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
@@ -55,6 +56,22 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#ff7539"
   },
+  modalContainer: {
+    flex: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+
+    // marginTop: 160,
+    // marginBottom: 160,
+    // marginLeft: 80,
+    // marginRight: 80,
+    shadowColor: "#484848",
+    shadowOpacity: 0.8,
+    elevation: 1,
+    backgroundColor: "rgba(249,249,249, 0.9)",
+    borderRadius: 4
+  },
   modalContent: {
     alignSelf: "center",
     fontSize: 20,
@@ -80,9 +97,12 @@ class ListView extends React.Component {
     super(props);
 
     this.state = {
-      modalSorting: true,
+      modalSorting: false,
+      modalFiltering: false,
+      filter: "category",
       sort: "category",
-      data
+      data,
+      textInput: "Search..."
     };
   }
 
@@ -90,12 +110,12 @@ class ListView extends React.Component {
     title: "List"
   };
 
-  componentWillUpdate() {
-    //this.sortBy();
+  setModalSortingVisible(visible) {
+    this.setState({ modalSorting: visible });
   }
 
-  setModalVisible(visible) {
-    this.setState({ modalSorting: visible });
+  setModalFilteringVisible(visible) {
+    this.setState({ modalFiltering: visible });
   }
 
   sortBy() {
@@ -138,6 +158,15 @@ class ListView extends React.Component {
     });
   }
 
+  setStateFiltering = filterParameter => {
+    this.setState(state => {
+      state.filter = filterParameter;
+      return state;
+    });
+
+    this.filterBy();
+  };
+
   setStateSorting = sortParameter => {
     this.setState(state => {
       state.sort = sortParameter;
@@ -148,15 +177,30 @@ class ListView extends React.Component {
     this.sortBy();
   };
 
+  findMatches(wordToMatch) {
+    return data.filter(document => {
+      const regExp = new RegExp(wordToMatch, "gi");
+      // return document.title.match(regExp) || document.content.match(regExp);
+      console.log(
+        "wordToMatch:",
+        wordToMatch,
+        "match:",
+        document.title.match(regExp) || document.content.match(regExp)
+      );
+    });
+  }
+
   render() {
     return (
       <View style={styles.background}>
         <SearchBar
+          onChangeText={textInput => this.setState({ textInput })}
+          onSubmitEditing={() => this.findMatches(this.state.textInput)}
           style={styles.searchBarContainer}
           containerStyle={{ backgroundColor: "#212121" }}
           inputStyle={{ backgroundColor: "#f9f9f9" }}
           round
-          placeholder="Search.."
+          placeholder={this.state.textInput}
         />
         <View style={styles.topIconsContainer}>
           <TouchableOpacity style={styles.topIcons}>
@@ -165,6 +209,9 @@ class ListView extends React.Component {
               name="filter-list"
               type="material"
               color="#212121"
+              onPress={() => {
+                this.setModalFilteringVisible(true);
+              }}
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.topIcons}>
@@ -174,7 +221,7 @@ class ListView extends React.Component {
               type="material"
               color="#212121"
               onPress={() => {
-                this.setModalVisible(true);
+                this.setModalSortingVisible(true);
               }}
             />
           </TouchableOpacity>
@@ -185,7 +232,7 @@ class ListView extends React.Component {
         {/* {console.log("DATA", data)} */}
         <FlatList
           data={this.state.data}
-          extraData={this.state.sort}
+          extraData={this.state}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             let iconPath;
@@ -237,24 +284,20 @@ class ListView extends React.Component {
               alert("Modal has been closed.");
             }}
           >
-            <View
-              style={{
-                flex: 4,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 160,
-                marginBottom: 160,
-                marginLeft: 80,
-                marginRight: 80,
-                shadowColor: "#484848",
-                shadowOpacity: 0.8,
-                elevation: 1,
-                backgroundColor: "rgba(249,249,249, 0.95)",
-                borderRadius: 4
-              }}
-            >
+            <View style={styles.modalContainer}>
               <View>
+                <Text
+                  style={{ fontSize: 25, color: "#484848", marginBottom: 10 }}
+                >
+                  Sort By
+                </Text>
+                <View
+                  style={{
+                    borderTopWidth: 1,
+                    borderColor: "#484848",
+                    marginBottom: 30
+                  }}
+                />
                 <TouchableOpacity
                   onPress={() => {
                     this.setStateSorting("category");
@@ -304,7 +347,66 @@ class ListView extends React.Component {
                 <TouchableHighlight
                   style={{ marginTop: 20, alignSelf: "center" }}
                   onPress={() => {
-                    this.setModalVisible(!this.state.modalSorting);
+                    this.setModalSortingVisible(!this.state.modalSorting);
+                  }}
+                >
+                  <Icon
+                    size={40}
+                    name="check"
+                    type="evilicon"
+                    color="#484848"
+                  />
+                </TouchableHighlight>
+              </View>
+            </View>
+          </Modal>
+        </View>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalFiltering}
+            onRequestClose={() => {
+              alert("Modal has been closed.");
+            }}
+          >
+            <View style={styles.modalContainer}>
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setStateFiltering("category");
+                  }}
+                >
+                  <Text
+                    style={
+                      this.state.filter === "category"
+                        ? styles.modalContentActive
+                        : styles.modalContent
+                    }
+                  >
+                    Label
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setStateFiltering("title");
+                  }}
+                >
+                  <Text
+                    style={
+                      this.state.filter === "title"
+                        ? styles.modalContentActive
+                        : styles.modalContent
+                    }
+                  >
+                    Title
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableHighlight
+                  style={{ marginTop: 20, alignSelf: "center" }}
+                  onPress={() => {
+                    this.setModalFilteringVisible(!this.state.modalFiltering);
                   }}
                 >
                   <Icon
