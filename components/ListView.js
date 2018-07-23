@@ -247,7 +247,7 @@ class ListView extends React.Component {
           }}
           keyExtractor={item => item._id}
         />
-        <View style={{ background: "#bada55", borderColor: "red" }}>
+        <View>
           <Modal
             animationType="slide"
             transparent={true}
