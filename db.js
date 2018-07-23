@@ -50,7 +50,7 @@ export const data = [
     title: "Sparkasse",
     image: "https://www.w3schools.com/w3css/img_lights.jpg",
     content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
+      "Lorem 666 dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore",
     date: "1530576000"
   },
   {
