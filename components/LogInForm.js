@@ -10,16 +10,28 @@ import {
 import SvgUri from 'react-native-svg-uri';
 
 export default class LogInForm extends Component {
-	constructor(props) {
-		super(props);
-		state = {
-			email: '',
-			password: ''
-		};
-	}
+        state = {
+                email: 'admin@example.com',
+                password: 'password123'
+        }
 
 	onClickListener = viewId => {
-		Alert.alert('Alert', 'Button pressed ' + viewId);
+          fetch('http://localhost:8080/api/login', {
+            method: "POST",
+            body: JSON.stringify({
+              email: this.state.email.toLowerCase(),
+              password: this.state.password,
+            }),
+          })
+            .then(res => res.json())
+            .then(data => {
+              console.log('#####', data);
+              //TODO this should be AsycStorage
+              localStorage.setItem("token", data.token)
+            })
+            .catch(err => {
+              console.log(err)
+            })
 	};
 
 	render() {
@@ -34,6 +46,7 @@ export default class LogInForm extends Component {
 					<TextInput
 						style={styles.inputs}
 						placeholder="Email"
+                                                value="admin@example.com"
 						keyboardType="email-address"
 						onChangeText={email => this.setState({ email })}
 					/>
@@ -42,6 +55,7 @@ export default class LogInForm extends Component {
 				<View style={styles.inputContainer}>
 					<TextInput
 						style={styles.inputs}
+                                                value="password123"
 						placeholder="Password"
 						secureTextEntry={true}
 						onChangeText={password => this.setState({ password })}
@@ -92,7 +106,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignSelf: 'stretch',
 		height: 40,
-		color: '#fff',
+		color: '#333',
 		borderBottomColor: '#f8f8f8',
 		borderBottomWidth: 1
 	},
