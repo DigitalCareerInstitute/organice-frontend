@@ -143,18 +143,27 @@ class ChangePassword extends React.Component {
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
           placeholder="Enter password"
+          textContentType="password"
+          selectTextOnFocus={true}
+          secureTextEntry={true}
         />
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
           placeholder="Enter new password"
+          textContentType="password"
+          selectTextOnFocus={true}
+          secureTextEntry={true}
         />
         <TextInput
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
           placeholder="re-enter new Password"
+          textContentType="password"
+          selectTextOnFocus={true}
+          secureTextEntry={true}
         />
         <TouchableOpacity style={styles.passwordBtn}>
           <Text style={styles.passwordTxt}>RESET PASSWORD</Text>
