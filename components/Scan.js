@@ -119,6 +119,10 @@ class Scan extends React.Component {
   accept = async () => {
    console.log('Accept: ', this.state.lastShotURI);
   };
+  decline = async () => {
+   console.log('decline');
+   this.setState({lastShotURI: null})
+  };
 
   toggleFlash = () => { 
     this.setState({ flash: flashModeOrder[this.state.flash] });
@@ -159,7 +163,7 @@ class Scan extends React.Component {
               ratio={this.state.ratio}
               pictureSize={this.state.pictureSize}
             >
-            <PreviewShot accept={this.accept} lastShotURI={this.state.lastShotURI} />
+            <PreviewShot accept={this.accept} decline={this.decline} lastShotURI={this.state.lastShotURI} />
             {/* TODO The View below is a hacky placeholder */}
             <View style={{ flex: 1 }} pointerEvents="none"/>
             <View style={styles.bottomBar}>
@@ -215,12 +219,15 @@ class PreviewShot extends React.Component {
         >
         {this.props.lastShotURI ? (
             (
-              <View style={{ position: 'relative', height: "90%" }} >
+              <View style={{ position: 'relative', height: "100%" }} >
                 <Image source={{ uri: this.props.lastShotURI }} style={{ flex: 1, backgroundColor: 'pink', zIndex: -1 }}/>
                 { /*<View style={{ height: "10%", backgroundColor: 'white', zIndex: 999999999 }}>
                   <Text style={styles.btnText}>Accept</Text>
                 </View>
                 */}
+                <TouchableOpacity style={{ height: "10%", backgroundColor: 'white'  }} onPress={this.props.decline}>
+                  <Text style={styles.btnText}>Take another</Text>
+                </TouchableOpacity>
                 <TouchableOpacity style={{ height: "10%", backgroundColor: 'white'  }} onPress={this.props.accept}>
                   <Text style={styles.btnText}>Accept</Text>
                 </TouchableOpacity>
