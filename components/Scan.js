@@ -19,8 +19,21 @@ const flashIcons = {
 
 const styles = StyleSheet.create({
   btnText: {
+    color: 'white',
     textAlign: 'center',
     zIndex: 99999,
+  },
+  preview: {
+    //zIndex: 99999,
+    position: 'absolute',
+    top: "0%",
+    left: "10%",
+    bottom: "20%",
+    right: "10%",
+    borderRadius: 10,
+    backgroundColor: "rgba(255, 255, 55, 0.4)",
+    opacity: .8,
+    overflow: "hidden"
   },
   noPermissions: {
     flex: 1,
@@ -39,22 +52,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }, 
   topBar: {
-    flex: 0.2,
     backgroundColor: 'black',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingTop: Constants.statusBarHeight / 2
+    paddingTop: Constants.statusBarHeight / 4
   },
   bottomBar: {
-    height: 80,
-    backgroundColor: "rgba(0, 0, 0, 0.1)",
+    height: 60,
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "center",
     alignItems: "center"
   },
   bottomBarElements: {
-    width: 50,
-    height: 50
+    height: 40
   },
   trigger: {
     backgroundColor: "white",
@@ -164,7 +175,7 @@ class Scan extends React.Component {
               pictureSize={this.state.pictureSize}
             >
             <PreviewShot accept={this.accept} decline={this.decline} lastShotURI={this.state.lastShotURI} />
-            {/* TODO The View below is a hacky placeholder */}
+            {/* TODO This is pretty hacky */}
             <View style={{ flex: 1 }} pointerEvents="none"/>
             <View style={styles.bottomBar}>
               <Trigger snap={this.snap} style={styles.bottomBarElements} />
@@ -204,34 +215,25 @@ class PreviewShot extends React.Component {
   render() {
     return (
       <View
-        style={{
-          //zIndex: 99999,
-          position: 'absolute',
-          top: "10%",
-          left: "10%",
-          bottom: "10%",
-          right: "10%",
-          borderRadius: 10,
-          backgroundColor: "rgba(255, 255, 55, 0.1)",
-          opacity: .8,
-          overflow: "hidden"
-        }}
+        style={styles.preview}
         >
         {this.props.lastShotURI ? (
             (
               <View style={{ position: 'relative', height: "100%" }} >
-                <Image source={{ uri: this.props.lastShotURI }} style={{ flex: 1, backgroundColor: 'pink', zIndex: -1 }}/>
+                <Image source={{ uri: this.props.lastShotURI }} style={{ flex: 6, backgroundColor: 'pink', zIndex: -1 }}/>
                 { /*<View style={{ height: "10%", backgroundColor: 'white', zIndex: 999999999 }}>
                   <Text style={styles.btnText}>Accept</Text>
                 </View>
                 */}
-                <TouchableOpacity style={{ height: "10%", backgroundColor: 'white'  }} onPress={this.props.decline}>
-                  <Text style={styles.btnText}>Take another</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{ height: "10%", backgroundColor: 'white'  }} onPress={this.props.accept}>
-                  <Text style={styles.btnText}>Accept</Text>
-                </TouchableOpacity>
+                <View style={{ flex: 1, flexDirection: "row",  display: 'flex'}}>
+                  <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)"  }} onPress={this.props.decline}>
+                    <Text style={styles.btnText}>Take another</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)"  }} onPress={this.props.accept}>
+                    <Text style={styles.btnText}>Accept</Text>
+                  </TouchableOpacity>
 
+                  </View>
               </View>
             )
         ) : (
