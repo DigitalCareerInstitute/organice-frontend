@@ -103,7 +103,8 @@ class ListView extends React.Component {
       data,
       modalSorting: false,
       sort: "category",
-      search: ""
+      search: "",
+      delete: false
     };
   }
 
@@ -116,7 +117,6 @@ class ListView extends React.Component {
   }
 
   sortBy() {
-    // console.log("sort", this.state.sort);
     if (this.state.sort === "date") {
       data.sort(function(a, b) {
         return a.date - b.date;
@@ -156,6 +156,7 @@ class ListView extends React.Component {
   }
 
   setStateSorting = sortParameter => {
+    // Sets the state according to the sorting parameter
     this.setState(state => {
       state.sort = sortParameter;
       // console.log(state);
@@ -168,6 +169,20 @@ class ListView extends React.Component {
   findMatches(search) {
     this.setState({ search });
   }
+
+  toggleDeleteMode = () => {
+    this.setState({ delete: !this.state.delete });
+  };
+
+  singleView = () => {
+    console.log("Go to Single View >>>>");
+  };
+
+  deleteItem = item => {
+    if (this.state.delete) {
+      console.log("Delete Item >>>>", item);
+    }
+  };
 
   render() {
     const filteredList = this.state.data.filter(
@@ -198,7 +213,15 @@ class ListView extends React.Component {
             />
           </TouchableOpacity>
           <TouchableOpacity style={styles.topIcons}>
-            <Icon size={30} name="edit" type="material" color="#212121" />
+            <Icon
+              size={30}
+              name="edit"
+              type="material"
+              color="#212121"
+              onPress={() => {
+                this.toggleDeleteMode();
+              }}
+            />
           </TouchableOpacity>
         </View>
         {/* {console.log("DATA", data)} */}
@@ -209,7 +232,9 @@ class ListView extends React.Component {
           renderItem={({ item }) => {
             let iconPath;
 
-            if (item.category === "finance") {
+            if (this.state.delete) {
+              iconPath = require("../icons/label_delete.svg");
+            } else if (item.category === "finance") {
               iconPath = require("../icons/label_finance.svg");
             } else if (item.category === "state") {
               iconPath = require("../icons/label_state.svg");
@@ -221,10 +246,18 @@ class ListView extends React.Component {
 
             return (
               <View style={styles.listOuterContainer}>
-                <TouchableOpacity style={styles.listInnerContainer}>
-                  <View style={{ alignSelf: "center", padding: 10 }}>
+                <TouchableOpacity
+                  style={styles.listInnerContainer}
+                  onPress={() => {
+                    this.singleView();
+                  }}
+                >
+                  <TouchableOpacity
+                    style={{ alignSelf: "center", padding: 10 }}
+                    onPress={() => this.deleteItem(item)}
+                  >
                     <SvgUri width={40} height={40} source={iconPath} />
-                  </View>
+                  </TouchableOpacity>
                   <View style={{ flexShrink: 1 }}>
                     <View
                       style={{
@@ -263,7 +296,6 @@ class ListView extends React.Component {
                     fontSize: 20,
                     fontWeight: "bold",
                     color: "#484848"
-                    // marginBottom: 5
                   }}
                 >
                   Sort By
