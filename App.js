@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import Footer from "./components/Footer";
 import SplashScreen from "./components/SplashScreen";
 
@@ -8,7 +7,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      data: {},
+      scans: {},
       loading: true
     };
   }
@@ -28,22 +27,19 @@ class App extends React.Component {
   }
 
   getScans = () => {
-    const myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9zYW1hQGV4YW1wbGUuY29tIiwiaWQiOiI1YjU3MjRjZDM4NWE4YjBiMzkwMTUyODkiLCJpYXQiOjE1MzI0Mzc5NjEsImV4cCI6MTU2Mzk3Mzk2MX0.eF75GChYGhPDTMP1rNLQObBx1z8O4afMONAH_cHzFOY"
-    );
     //10.0.2.2
-    fetch(`http://172.16.137.115:8080/api/scans`, {
+    fetch(`http://"your IP addrs":8080/api/scans`, {
       method: "get",
-      headers: myHeaders
+      headers: {
+        Authorization: "Bearer 'put a user token here'"
+      }
     })
       .then(res => res.json())
       .then(res => {
         const data = res;
         console.log(data);
         this.setState(state => {
-          state.data = data;
+          state.scans = data;
           state.loading = false;
           return state;
         });
