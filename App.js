@@ -1,4 +1,5 @@
 import React from "react";
+import { DOMAIN, TOKEN } from 'react-native-dotenv'
 import Footer from "./components/Footer";
 import SplashScreen from "./components/SplashScreen";
 
@@ -28,10 +29,10 @@ class App extends React.Component {
 
   getScans = () => {
     //10.0.2.2
-    fetch(`http://"your IP addrs":8080/api/scans`, {
+    fetch(`http://${DOMAIN}:8080/api/scans`, {
       method: "get",
       headers: {
-        Authorization: "Bearer 'put a user token here'"
+        "Authorization": TOKEN
       }
     })
       .then(res => res.json())
