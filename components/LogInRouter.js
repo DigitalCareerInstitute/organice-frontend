@@ -24,22 +24,18 @@ class LogInRouter extends React.Component {
       }
     },
     {
-      // navigationOptions: ({ navigation }) => {
-      //   let routeName = navigation.state.routeName;
-      //   if (routeName === "login") {
-      //     return <LogInForm />;
-      //   }
-      //   if (routeName === "register") {
-      //     return <RegForm />;
-      //   } else {
-      //     return <LogInForm />;
-      //   }
-      // },
       headerMode: "float"
     }
   );
   render() {
-    return <this.Navigator screenProps={{ loginUser: this.props.loginUser }} />;
+    return (
+      <this.Navigator
+        screenProps={{
+          loginUser: this.props.loginUser,
+          registerNewUser: this.props.registerNewUser
+        }}
+      />
+    );
   }
 }
 

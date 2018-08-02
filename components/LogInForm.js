@@ -63,8 +63,8 @@ class LogInForm extends React.Component {
     };
 
     this.props.screenProps.loginUser(user);
-    // this.props.loginUser(user);
   };
+
   render() {
     return (
       <View style={styles.loginForm}>
