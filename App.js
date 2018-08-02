@@ -1,8 +1,8 @@
 import React from "react";
-import PrivateNavs from "./components/PrivateNavs";
+import PublicNavs from "./components/PublicNavs";
 import SplashScreen from "./components/SplashScreen";
 import { AsyncStorage } from "react-native";
-import LogInForm from "./components/LogInForm";
+import { DOMAIN, TOKEN } from "react-native-dotenv";
 
 class App extends React.Component {
   constructor(props) {
@@ -10,9 +10,21 @@ class App extends React.Component {
 
     this.state = {
       scans: {},
-      token: false,
+      noToken: true,
       loading: true
     };
+  }
+
+  componentWillMount() {
+    // leave the function commented / for Development mode
+    // this.checkToken();
+  }
+
+  componentDidMount() {
+    // this.getScans();
+    setTimeout(() => {
+      this.hideSplashScreen();
+    }, 500);
   }
 
   hideSplashScreen = () => {
@@ -22,31 +34,44 @@ class App extends React.Component {
     });
   };
 
-  componentDidMount() {
+  checkToken = async () => {
     try {
-      user2 = await AsyncStorage.getItem("token");
-      console.log(user2);
-      return user2;
+      const token = await AsyncStorage.getItem("token");
+      if (token !== null) {
+        console.log(token);
+        this.setState(state => {
+          state.noToken = false;
+          return state;
+        });
+      } else {
+        console.log(token);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  setToken = async token => {
+    try {
+      const TOKEN = await AsyncStorage.setItem("token", token);
+      return TOKEN;
     } catch (error) {
       console.log(error.message);
     }
-    // this.getScans();
-    setTimeout(() => {
-      this.hideSplashScreen();
-    }, 1000);
-  }
+  };
 
-  // componentWillMount() {
-  //   // TODO Get AsyncStorage token
-  
-  // }
+  removeToken = async key => {
+    try {
+      await AsyncStorage.removeItem(key);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   loginUser = async user => {
-    // let user = null;
-    console.log(user);
-    
     //10.0.2.2
-    fetch(`http://172.16.137.115:8080/api/login`, {
+    fetch(`http://${DOMAIN}:8080/api/login`, {
       method: "post",
       headers: new Headers({
         "Content-Type": "application/json"
@@ -58,41 +83,41 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
-        const userData = res;
-        console.log(userData);
-        //TODO AsyncStorage.setItem("token", res.user.token)
-        return userData;
+        this.removeToken("token");
+        this.setToken(res.user.token);
+        this.getScans(res.user.token);
+        this.checkToken();
       })
       .catch(err => console.error(err));
   };
 
-  getScans = () => {
+  getScans = async token => {
     //10.0.2.2
-    fetch(`http://172.16.137.115:8080/api/scans`, {
+    fetch(`http://${DOMAIN}:8080/api/scans`, {
       method: "get",
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFhYUBleGFtcGxlLmNvbSIsImlkIjoiNWI1ZWNjMmVlNTQwMDkyMWIzZjg1MjE3IiwiaWF0IjoxNTMyOTM5MzEwLCJleHAiOjE1MzMxMTIxMTB9.PSgQXIJ_Yn0WYy_or7YdYSmqyAL51FtDS2vhaTvJpow"
-      }
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      })
     })
       .then(res => res.json())
       .then(res => {
         const data = res;
-        // console.log(data);
+        console.log(data);
         this.setState(state => {
           state.scans = data;
           state.loading = false;
           return state;
         });
       })
-      .catch(err => console.error(err));
+      .catch(err => console.log(err));
   };
 
   render() {
     return this.state.loading ? (
       <SplashScreen />
     ) : (
-      <LogInForm loginUser={this.loginUser} />
+      <PublicNavs noToken={this.state.noToken} loginUser={this.loginUser} />
     );
   }
 }

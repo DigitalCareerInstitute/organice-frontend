@@ -1,85 +1,111 @@
 import React from "react";
 import {
-  TouchableOpacity,
   StyleSheet,
   Text,
   View,
   TextInput,
-  Button,
-  AsyncStorage
+  TouchableOpacity
 } from "react-native";
+import SvgUri from "react-native-svg-uri";
 
 const styles = StyleSheet.create({
-  regForm: {
-    alignSelf: "stretch",
-    justifyContent: "center"
+  loginForm: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 5,
+    backgroundColor: "#fff"
   },
-  header: {
-    fontSize: 20,
-    color: "#fff",
-    paddingBottom: 10,
-    marginBottom: 40,
-    borderBottomColor: "#199187",
-    borderBottomWidth: 1
-  },
-  textInput: {
+  inputText: {
+    flexDirection: "row",
     alignSelf: "stretch",
-    height: 40,
-    marginBottom: 30,
-    color: "black",
-    borderBottomColor: "#f8f8f8",
-    borderBottomWidth: 1
+    padding: 12,
+    margin: 10,
+    marginTop: 30,
+    borderStyle: "solid",
+    borderColor: "black",
+    borderWidth: 0.6,
+    letterSpacing: 1,
+    color: "#ff7539"
   },
   button: {
     alignSelf: "stretch",
     alignItems: "center",
+    margin: 10,
+    marginTop: 35,
     padding: 20,
-    backgroundColor: "#0fa1ff",
-    marginTop: 30
+    backgroundColor: "#ff7539"
   },
   btnText: {
     color: "#fff",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    letterSpacing: 1.3
+  },
+  regText: {
+    margin: 10,
+    marginTop: 10,
+    color: "#6c6c6c",
+    letterSpacing: 1.3
+  },
+  regLink: {
+    color: "#ff7539"
   }
 });
 
 class LogInForm extends React.Component {
-  submit = async e => {
-    // hard coded for now
-    console.log("hii");
+  email = React.createRef();
+  password = React.createRef();
+
+  submit = () => {
     const user = {
-      email: "osama@example.com",
-      password: "osama"
+      email: this.email,
+      password: this.password
     };
-    // this.setState(state => {
-    //   state.user = user;
-    //   return state;
-    // });
 
-    this.props.loginUser(user);
+    this.props.screenProps.loginUser(user);
+    // this.props.loginUser(user);
   };
-
   render() {
     return (
-      <View style={styles.regForm}>
-        <Text style={styles.header}>Log In</Text>
+      <View style={styles.loginForm}>
+        <SvgUri
+          width="170"
+          height="170"
+          source={require("../icons/logo.svg")}
+        />
         <TextInput
-          style={styles.textInput}
+          style={styles.inputText}
+          ref={this.email}
+          textContentType="emailAddress"
+          keyboardType="email-address"
           placeholder="Your Email"
-          underlineColorAndroid={"transparent"}
+          underlineColorAndroid="transparent"
+          selectTextOnFocus={true}
+          onChangeText={e => (this.email = e)}
         />
         <TextInput
-          style={styles.textInput}
+          style={styles.inputText}
+          ref={this.password}
+          textContentType="password"
           placeholder="Your Password"
-          underlineColorAndroid={"transparent"}
+          underlineColorAndroid="transparent"
+          secureTextEntry={true}
+          selectTextOnFocus={true}
+          onChangeText={e => (this.password = e)}
         />
-        <Button
-          style={styles.button}
-          onPress={e => this.submit(e)}
-          title="Login"
-          color="#841584"
-          accessibilityLabel="Log in to Organice"
-        />
+        <TouchableOpacity style={styles.button} onPress={() => this.submit()}>
+          <Text style={styles.btnText}>Log In</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.regText}>
+          New to Organice?{" "}
+          <Text
+            style={styles.regLink}
+            onPress={() => this.props.navigation.navigate("register")}
+          >
+            Register Now
+          </Text>
+        </Text>
       </View>
     );
   }
