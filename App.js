@@ -16,12 +16,10 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    // leave the function commented / for Development mode
-    // this.checkToken();
+    this.checkIfTokenExists();
   }
 
   componentDidMount() {
-    // this.getScans();
     setTimeout(() => {
       this.hideSplashScreen();
     }, 500);
@@ -34,7 +32,7 @@ class App extends React.Component {
     });
   };
 
-  checkToken = async () => {
+  checkIfTokenExists = async () => {
     try {
       const token = await AsyncStorage.getItem("token");
       if (token !== null) {
@@ -60,7 +58,7 @@ class App extends React.Component {
     }
   };
 
-  removeToken = async key => {
+  clearToken = async key => {
     try {
       await AsyncStorage.removeItem(key);
       return true;
@@ -70,7 +68,6 @@ class App extends React.Component {
   };
 
   loginUser = async user => {
-    //10.0.2.2
     fetch(`http://${DOMAIN}:8080/api/login`, {
       method: "post",
       headers: new Headers({
@@ -83,16 +80,15 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
-        this.removeToken("token");
+        this.clearToken("token");
         this.setToken(res.user.token);
         this.getScans(res.user.token);
-        this.checkToken();
+        this.checkIfTokenExists();
       })
       .catch(err => console.error(err));
   };
 
   getScans = async token => {
-    //10.0.2.2
     fetch(`http://${DOMAIN}:8080/api/scans`, {
       method: "get",
       headers: new Headers({
