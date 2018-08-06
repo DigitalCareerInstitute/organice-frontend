@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Constants, Camera, Permissions, FileSystem,} from "expo";
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { DOMAIN } from "react-native-dotenv";
+import { AsyncStorage } from "react-native";
 const flashModeOrder = {
   off: 'on',
   on: 'auto',
@@ -105,8 +106,7 @@ class Scan extends React.Component {
   takenPicture = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
-      console.log('Photo made: ', photo);
-      this.setState({ lastShotURI: photo.uri });
+       this.setState({ lastShotURI: photo.uri });
     }
   };
 
@@ -121,15 +121,49 @@ class Scan extends React.Component {
   snap = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
-      console.log("Photo made: ", photo);
       this.setState({ lastShotURI: photo.uri });
-      console.log("Photo made: ", this.state);
     }
   };
 
   accept = async () => {
-   console.log('Accept: ', this.state.lastShotURI);
+    //// Manually set a valid token with: 
+    // await AsyncStorage.setItem("token", "YOUR.TOKEN.HERE");
+    const TOKEN = await AsyncStorage.getItem("token");
+    
+    if(!TOKEN){
+      alert("not autenticated")
+      //TODO redirect to login view if token is wrong or not set
+      return;
+    }
+    var photo = {
+      uri: this.state.lastShotURI,
+      type: 'image/jpeg',
+      name: 'photo.jpg',
+    };
+
+    var body = new FormData();
+    body.append('date', Date.now());
+    body.append('image', photo);
+    body.append('title', Date.now());
+
+    fetch(`http://${DOMAIN}:8080/api/scans/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${TOKEN}`
+      },
+      body: body
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(JSON.stringify(data.scan.recognizedText.text))
+      })
+      .catch(err => {
+        console.log(err);
+        alert(err)
+      });
   };
+
   decline = async () => {
    console.log('decline');
    this.setState({lastShotURI: null})
@@ -137,7 +171,7 @@ class Scan extends React.Component {
 
   toggleFlash = () => { 
     this.setState({ flash: flashModeOrder[this.state.flash] });
-  }
+  };
 
   render() {
     const { hasCameraPermission } = this.state;
