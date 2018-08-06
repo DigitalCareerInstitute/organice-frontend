@@ -1,5 +1,4 @@
 import React from "react";
-import { createStackNavigator } from "react-navigation";
 import PrivateNavs from "./PrivateNavs";
 import LogInRouter from "./LogInRouter";
 

@@ -16,7 +16,7 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    // this.checkIfTokenExists();
+    this.checkIfTokenExists();
   }
 
   componentDidMount() {
@@ -44,7 +44,7 @@ class App extends React.Component {
         console.log("No token", token);
       }
     } catch (err) {
-      console.error(err);
+      console.error(error.message);
     }
   };
 
@@ -62,6 +62,7 @@ class App extends React.Component {
       await AsyncStorage.removeItem(key);
       return true;
     } catch (error) {
+      console.log(error.message);
       return false;
     }
   };
@@ -84,7 +85,7 @@ class App extends React.Component {
         this.getScans(res.user.token);
         this.checkIfTokenExists();
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err.message));
   };
 
   registerNewUser = async data => {
@@ -105,7 +106,7 @@ class App extends React.Component {
         this.getScans(res.user.token);
         this.checkIfTokenExists();
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err.message));
   };
 
   getScans = async token => {
@@ -126,7 +127,7 @@ class App extends React.Component {
           return state;
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err.message));
   };
 
   render() {

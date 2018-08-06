@@ -6,7 +6,6 @@ import {
   View,
   TextInput
 } from "react-native";
-import { CheckBox } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
 
 const styles = StyleSheet.create({

@@ -5,7 +5,6 @@ import Scan from "./Scan";
 import { createBottomTabNavigator } from "react-navigation";
 import SvgUri from "react-native-svg-uri";
 
-// class PrivateNavs extends React.Component {
 const PrivateNavs = createBottomTabNavigator(
   {
     list: List,
@@ -58,10 +57,5 @@ const PrivateNavs = createBottomTabNavigator(
     }
   }
 );
-
-//   render() {
-//     return <this.Footer />;
-//   }
-// }
 
 export default PrivateNavs;
