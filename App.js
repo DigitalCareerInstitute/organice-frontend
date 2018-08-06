@@ -2,7 +2,7 @@ import React from "react";
 import PublicNavs from "./components/PublicNavs";
 import SplashScreen from "./components/SplashScreen";
 import { AsyncStorage } from "react-native";
-import { DOMAIN, TOKEN } from "react-native-dotenv";
+import { DOMAIN } from "react-native-dotenv";
 
 class App extends React.Component {
   constructor(props) {
@@ -36,16 +36,15 @@ class App extends React.Component {
     try {
       const token = await AsyncStorage.getItem("token");
       if (token !== null) {
-        console.log(token);
         this.setState(state => {
           state.noToken = false;
           return state;
         });
       } else {
-        console.log(token);
+        console.log("No token", token);
       }
     } catch (err) {
-      console.error(err);
+      console.error(error.message);
     }
   };
 
@@ -63,6 +62,7 @@ class App extends React.Component {
       await AsyncStorage.removeItem(key);
       return true;
     } catch (error) {
+      console.log(error.message);
       return false;
     }
   };
@@ -85,7 +85,28 @@ class App extends React.Component {
         this.getScans(res.user.token);
         this.checkIfTokenExists();
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error(err.message));
+  };
+
+  registerNewUser = async data => {
+    fetch(`http://${DOMAIN}:8080/api/register`, {
+      method: "post",
+      headers: new Headers({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({
+        name: `${data.name}`,
+        email: `${data.email}`,
+        password: `${data.password}`
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        this.setToken(res.user.token);
+        this.getScans(res.user.token);
+        this.checkIfTokenExists();
+      })
+      .catch(err => console.error(err.message));
   };
 
   getScans = async token => {
@@ -106,14 +127,18 @@ class App extends React.Component {
           return state;
         });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err.message));
   };
 
   render() {
     return this.state.loading ? (
       <SplashScreen />
     ) : (
-      <PublicNavs noToken={this.state.noToken} loginUser={this.loginUser} />
+      <PublicNavs
+        noToken={this.state.noToken}
+        loginUser={this.loginUser}
+        registerNewUser={this.registerNewUser}
+      />
     );
   }
 }
