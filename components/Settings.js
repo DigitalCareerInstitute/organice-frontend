@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  Button,
   View
 } from "react-native";
 
@@ -17,6 +16,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
     padding: 10
   },
+  changePassword: {
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+    padding: 10,
+    paddingTop: 30
+  },
   avatar: {
     alignSelf: "stretch",
     flexDirection: "row",
@@ -25,9 +30,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 15,
     marginTop: 45
-    // borderBottomWidth: 0.8,
-    // borderStyle: "solid",
-    // borderColor: "black"
   },
   avatarName: {
     fontSize: 20,
@@ -53,6 +55,10 @@ const styles = StyleSheet.create({
   btnText: {
     letterSpacing: 1,
     color: "#ff7539"
+  },
+  deleteText: {
+    letterSpacing: 1,
+    color: "#E82C0C"
   },
   logOutBtn: {
     flexDirection: "row",
@@ -120,7 +126,14 @@ class Settings extends React.Component {
           <Text style={styles.btnText}>Privacy policy</Text>
           <Icon name="file-text-o" type="font-awesome" color="#ff7539" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logOutBtn}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.deleteText}>Delete Account</Text>
+          <Icon name="times" type="font-awesome" color="#E82C0C" />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.logOutBtn}
+          onPress={() => this.props.screenProps.logoutUser()}
+        >
           <Text style={styles.btnText}>Log out</Text>
           <Icon
             containerStyle={{ marginLeft: 8 }}
@@ -135,10 +148,21 @@ class Settings extends React.Component {
 }
 
 class ChangePassword extends React.Component {
+  password = React.createRef();
+  newPass = React.createRef();
+  reNewPass = React.createRef();
+
+  submit = () => {
+    if (this.newPass === this.reNewPass) {
+      this.props.screenProps.changePassword(this.newPass);
+    }
+  };
+
   render() {
     return (
-      <View style={styles.main}>
+      <View style={styles.changePassword}>
         <TextInput
+          ref={this.password}
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
@@ -146,8 +170,10 @@ class ChangePassword extends React.Component {
           textContentType="password"
           selectTextOnFocus={true}
           secureTextEntry={true}
+          onChangeText={e => (this.password = e)}
         />
         <TextInput
+          ref={this.newPass}
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
@@ -155,8 +181,10 @@ class ChangePassword extends React.Component {
           textContentType="password"
           selectTextOnFocus={true}
           secureTextEntry={true}
+          onChangeText={e => (this.newPass = e)}
         />
         <TextInput
+          ref={this.reNewPass}
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
@@ -164,8 +192,12 @@ class ChangePassword extends React.Component {
           textContentType="password"
           selectTextOnFocus={true}
           secureTextEntry={true}
+          onChangeText={e => (this.reNewPass = e)}
         />
-        <TouchableOpacity style={styles.passwordBtn}>
+        <TouchableOpacity
+          style={styles.passwordBtn}
+          onPress={() => this.submit()}
+        >
           <Text style={styles.passwordTxt}>RESET PASSWORD</Text>
         </TouchableOpacity>
       </View>
