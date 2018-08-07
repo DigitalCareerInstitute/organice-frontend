@@ -42,6 +42,10 @@ class App extends React.Component {
         });
       } else {
         console.log("No token", token);
+        this.setState(state => {
+          state.noToken = true;
+          return state;
+        });
       }
     } catch (err) {
       console.error(error.message);
@@ -88,6 +92,11 @@ class App extends React.Component {
       .catch(err => console.error(err.message));
   };
 
+  logoutUser = () => {
+    this.clearToken("token");
+    this.checkIfTokenExists();
+  };
+
   registerNewUser = async data => {
     fetch(`http://${DOMAIN}:8080/api/register`, {
       method: "post",
@@ -105,6 +114,34 @@ class App extends React.Component {
         this.setToken(res.user.token);
         this.getScans(res.user.token);
         this.checkIfTokenExists();
+      })
+      .catch(err => console.error(err.message));
+  };
+
+  changePassword = async newPassword => {
+    let token = null;
+    try {
+      token = await AsyncStorage.getItem("token");
+    } catch (err) {
+      console.error(error.message);
+    }
+    fetch(`http://${DOMAIN}:8080/api/users/updatepassword`, {
+      method: "post",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }),
+      body: JSON.stringify({
+        password: `${newPassword}`
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.clearToken("token");
+        this.setToken(res.user.token);
+        this.checkIfTokenExists();
+        console.log('Password Changed to: ', NewPassword)
       })
       .catch(err => console.error(err.message));
   };
@@ -138,6 +175,9 @@ class App extends React.Component {
         noToken={this.state.noToken}
         loginUser={this.loginUser}
         registerNewUser={this.registerNewUser}
+        logoutUser={this.logoutUser}
+        changePassword={this.changePassword}
+        scans={this.state.scans}
       />
     );
   }

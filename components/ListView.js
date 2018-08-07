@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
 class ListView extends React.Component {
   constructor(props) {
     super(props);
-
+    // use 'this.props.screenProps.scans' if you want to get the scans.
     this.state = {
       data,
       modalSorting: false,
