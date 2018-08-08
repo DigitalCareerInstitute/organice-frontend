@@ -10,6 +10,7 @@ class App extends React.Component {
 
     this.state = {
       scans: {},
+      userData: {},
       noToken: true,
       loading: true
     };
@@ -38,10 +39,15 @@ class App extends React.Component {
       if (token !== null) {
         this.setState(state => {
           state.noToken = false;
+          this.getScans(token)
           return state;
         });
       } else {
         console.log("No token", token);
+        this.setState(state => {
+          state.noToken = true;
+          return state;
+        });
       }
     } catch (err) {
       console.error(error.message);
@@ -80,6 +86,8 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
+        const userData = { email: res.user.email, name: res.user.name }
+        this.getUserDate(userData)
         this.clearToken("token");
         this.setToken(res.user.token);
         this.getScans(res.user.token);
@@ -87,6 +95,20 @@ class App extends React.Component {
       })
       .catch(err => console.error(err.message));
   };
+
+  logoutUser = () => {
+    this.clearToken("token");
+    this.checkIfTokenExists();
+  };
+
+  getUserDate = data => {
+    if (data) {
+      this.setState(state => {
+        state.userData = data
+        return state
+      })
+    }
+  }
 
   registerNewUser = async data => {
     fetch(`http://${DOMAIN}:8080/api/register`, {
@@ -102,9 +124,39 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
+        const userData = { email: res.user.email, name: res.user.name }
+        this.getUserDate(userData)
         this.setToken(res.user.token);
         this.getScans(res.user.token);
         this.checkIfTokenExists();
+      })
+      .catch(err => console.error(err.message));
+  };
+
+  changePassword = async newPassword => {
+    let token = null;
+    try {
+      token = await AsyncStorage.getItem("token");
+    } catch (err) {
+      console.error(error.message);
+    }
+    fetch(`http://${DOMAIN}:8080/api/users/updatepassword`, {
+      method: "post",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }),
+      body: JSON.stringify({
+        password: `${newPassword}`
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        this.clearToken("token");
+        this.setToken(res.user.token);
+        this.checkIfTokenExists();
+        console.log('Password Changed to: ', newPassword)
       })
       .catch(err => console.error(err.message));
   };
@@ -120,7 +172,6 @@ class App extends React.Component {
       .then(res => res.json())
       .then(res => {
         const data = res;
-        console.log(data);
         this.setState(state => {
           state.scans = data;
           state.loading = false;
@@ -135,11 +186,13 @@ class App extends React.Component {
       <SplashScreen />
     ) : (
         <PublicNavs
-          scans={this.state.scans}
           noToken={this.state.noToken}
+          userData={this.state.userData}
           loginUser={this.loginUser}
           registerNewUser={this.registerNewUser}
-          getScans={this.getScans}
+          logoutUser={this.logoutUser}
+          changePassword={this.changePassword}
+          scans={this.state.scans}
         />
       );
   }

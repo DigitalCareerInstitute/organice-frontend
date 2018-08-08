@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
 
 class ListView extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    // use 'this.props.screenProps.scans' if you want to get the scans.
     this.state = {
       scans: this.props.screenProps.scans,
       loading: true,
@@ -183,7 +184,7 @@ class ListView extends React.Component {
 
 
   render() {
-    // console.log(this.state.data)
+    console.log(this.state.scans)
     const filteredList = this.state.scans.length > 1 ? this.state.scans.filter(
       item =>
         item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
@@ -251,12 +252,12 @@ class ListView extends React.Component {
                         justifyContent: "space-between"
                       }}
                     >
-                      <Text style={styles.listItemTitle}>{item.title}</Text>
-                      <Text style={styles.listItemDate}>{item.date}</Text>
+                      <Text style={styles.listItemTitle}>{item.scans.scans[0].user}</Text>
+                      <Text style={styles.listItemDate}>{item.scans.scans[0].title}</Text>
                     </View>
                     <View>
                       <Text style={styles.listItemDescription}>
-                        {item.content}
+                        {item.scans.scans[0].recognizedText}
                       </Text>
                     </View>
                   </View>
@@ -264,7 +265,7 @@ class ListView extends React.Component {
               </View>
             );
           }}
-          keyExtractor={item => item._id}
+          keyExtractor={item => item.scans.user._id}
         />
         <View>
           <Modal
