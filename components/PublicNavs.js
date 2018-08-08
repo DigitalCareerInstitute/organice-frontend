@@ -12,10 +12,11 @@ class PublicNavs extends React.Component {
     ) : (
         <PrivateNavs
           screenProps={{
-            userData: this.props.userData,
             scans: this.props.scans,
             logoutUser: this.props.logoutUser,
-            changePassword: this.props.changePassword
+            changePassword: this.props.changePassword,
+            deleteUser: this.props.deleteUser,
+            userData: this.props.userData,
           }}
         />
       );
