@@ -155,6 +155,7 @@ class ChangePassword extends React.Component {
   submit = () => {
     if (this.newPass === this.reNewPass) {
       this.props.screenProps.changePassword(this.newPass);
+      this.props.navigation.navigate("settings")
     }
   };
 

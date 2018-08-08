@@ -86,7 +86,7 @@ class App extends React.Component {
       .then(res => res.json())
       .then(res => {
         const userData = { email: res.user.email, name: res.user.name }
-        this.getUserDate(userData)
+        this.getUserData(userData)
         this.clearToken("token");
         this.setToken(res.user.token);
         this.getScans(res.user.token);
@@ -100,7 +100,7 @@ class App extends React.Component {
     this.checkIfTokenExists();
   };
 
-  getUserDate = data => {
+  getUserData = data => {
     if (data) {
       this.setState(state => {
         state.userData = data
@@ -124,7 +124,7 @@ class App extends React.Component {
       .then(res => res.json())
       .then(res => {
         const userData = { email: res.user.email, name: res.user.name }
-        this.getUserDate(userData)
+        this.getUserData(userData)
         this.setToken(res.user.token);
         this.getScans(res.user.token);
         this.checkIfTokenExists();
