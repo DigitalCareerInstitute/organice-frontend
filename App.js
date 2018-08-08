@@ -134,12 +134,14 @@ class App extends React.Component {
     return this.state.loading ? (
       <SplashScreen />
     ) : (
-      <PublicNavs
-        noToken={this.state.noToken}
-        loginUser={this.loginUser}
-        registerNewUser={this.registerNewUser}
-      />
-    );
+        <PublicNavs
+          scans={this.state.scans}
+          noToken={this.state.noToken}
+          loginUser={this.loginUser}
+          registerNewUser={this.registerNewUser}
+          getScans={this.getScans}
+        />
+      );
   }
 }
 

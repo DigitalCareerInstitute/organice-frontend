@@ -10,8 +10,8 @@ class PublicNavs extends React.Component {
         registerNewUser={this.props.registerNewUser}
       />
     ) : (
-      <PrivateNavs />
-    );
+        <PrivateNavs screenProps={{ scans: this.props.scans }} />
+      );
   }
 }
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import { Constants, Camera, Permissions, FileSystem,} from "expo";
+import { Constants, Camera, Permissions, FileSystem, } from "expo";
 import { MaterialIcons } from '@expo/vector-icons';
 import { DOMAIN } from "react-native-dotenv";
 import { AsyncStorage } from "react-native";
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10
   },
- toggleButton: {
+  toggleButton: {
     flex: 0.25,
     height: 40,
     marginHorizontal: 2,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     padding: 5,
     alignItems: 'center',
     justifyContent: 'center'
-  }, 
+  },
   topBar: {
     backgroundColor: 'black',
     flexDirection: 'row',
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     borderRadius: 50 / 2
   },
   camera: {
-    flex: 1 
+    flex: 1
   }
 });
 
@@ -102,11 +102,11 @@ class Scan extends React.Component {
       console.log(e, 'Directory exists');
     });
   }
-  
+
   takenPicture = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
-       this.setState({ lastShotURI: photo.uri });
+      this.setState({ lastShotURI: photo.uri });
     }
   };
 
@@ -126,11 +126,11 @@ class Scan extends React.Component {
   };
 
   accept = async () => {
-    //// Manually set a valid token with: 
-    // await AsyncStorage.setItem("token", "YOUR.TOKEN.HERE");
+    //// Manually set a valid token with:
+    await AsyncStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFAYS5jb20iLCJpZCI6IjViNjk2ZDVkYjYxMzAxMzQwMTliMzIwNiIsImlhdCI6MTUzMzYzNTkzNH0.11qj179FdUTciJx0qbpGIdQBeVUnN9zjDqelKRTM8S0");
     const TOKEN = await AsyncStorage.getItem("token");
-    
-    if(!TOKEN){
+
+    if (!TOKEN) {
       alert("not autenticated")
       //TODO redirect to login view if token is wrong or not set
       return;
@@ -165,11 +165,11 @@ class Scan extends React.Component {
   };
 
   decline = async () => {
-   console.log('decline');
-   this.setState({lastShotURI: null})
+    console.log('decline');
+    this.setState({ lastShotURI: null })
   };
 
-  toggleFlash = () => { 
+  toggleFlash = () => {
     this.setState({ flash: flashModeOrder[this.state.flash] });
   };
 
@@ -196,21 +196,21 @@ class Scan extends React.Component {
                 color="white"
               />
             </TouchableOpacity>
-          </View>          
-            <Camera
-              ref={ref => {
-                this.camera = ref;
-              }}
-              style={styles.camera}
-              onCameraReady={this.collectPictureSizes}
-              type={this.state.type}
-              flashMode={this.state.flash}
-              ratio={this.state.ratio}
-              pictureSize={this.state.pictureSize}
-            >
+          </View>
+          <Camera
+            ref={ref => {
+              this.camera = ref;
+            }}
+            style={styles.camera}
+            onCameraReady={this.collectPictureSizes}
+            type={this.state.type}
+            flashMode={this.state.flash}
+            ratio={this.state.ratio}
+            pictureSize={this.state.pictureSize}
+          >
             <PreviewShot accept={this.accept} decline={this.decline} lastShotURI={this.state.lastShotURI} />
             {/* TODO This is pretty hacky */}
-            <View style={{ flex: 1 }} pointerEvents="none"/>
+            <View style={{ flex: 1 }} pointerEvents="none" />
             <View style={styles.bottomBar}>
               <Trigger snap={this.snap} style={styles.bottomBarElements} />
               <Settings style={styles.bottomBarElements} />
@@ -250,29 +250,29 @@ class PreviewShot extends React.Component {
     return (
       <View
         style={styles.preview}
-        >
+      >
         {this.props.lastShotURI ? (
-            (
-              <View style={{ position: 'relative', height: "100%" }} >
-                <Image source={{ uri: this.props.lastShotURI }} style={{ flex: 6, backgroundColor: 'pink', zIndex: -1 }}/>
-                { /*<View style={{ height: "10%", backgroundColor: 'white', zIndex: 999999999 }}>
+          (
+            <View style={{ position: 'relative', height: "100%" }} >
+              <Image source={{ uri: this.props.lastShotURI }} style={{ flex: 6, backgroundColor: 'pink', zIndex: -1 }} />
+              { /*<View style={{ height: "10%", backgroundColor: 'white', zIndex: 999999999 }}>
                   <Text style={styles.btnText}>Accept</Text>
                 </View>
                 */}
-                <View style={{ flex: 1, flexDirection: "row",  display: 'flex'}}>
-                  <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)"  }} onPress={this.props.decline}>
-                    <Text style={styles.btnText}>Take another</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)"  }} onPress={this.props.accept}>
-                    <Text style={styles.btnText}>Accept</Text>
-                  </TouchableOpacity>
+              <View style={{ flex: 1, flexDirection: "row", display: 'flex' }}>
+                <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)" }} onPress={this.props.decline}>
+                  <Text style={styles.btnText}>Take another</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ flex: 1, padding: 10, height: "50%", backgroundColor: "rgba(255, 255, 55, 0.1)" }} onPress={this.props.accept}>
+                  <Text style={styles.btnText}>Accept</Text>
+                </TouchableOpacity>
 
-                  </View>
               </View>
-            )
+            </View>
+          )
         ) : (
-          null
-        )}
+            null
+          )}
       </View>
     );
   }
