@@ -126,7 +126,7 @@ class Settings extends React.Component {
           <Text style={styles.btnText}>Privacy policy</Text>
           <Icon name="file-text-o" type="font-awesome" color="#ff7539" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={() => this.props.screenProps.deleteUser()}>
           <Text style={styles.deleteText}>Delete Account</Text>
           <Icon name="times" type="font-awesome" color="#E82C0C" />
         </TouchableOpacity>

@@ -118,6 +118,27 @@ class App extends React.Component {
       .catch(err => console.error(err.message));
   };
 
+  deleteUser = async () => {
+    let token = null;
+    try {
+      token = await AsyncStorage.getItem("token");
+    } catch (err) {
+      console.error(error.message);
+    }
+    fetch(`http://${DOMAIN}:8080/api/users/delete`, {
+      method: "post",
+      headers: new Headers({
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      })
+    })
+      .then(res => {
+        this.clearToken("token");
+        this.checkIfTokenExists();
+      })
+      .catch(err => console.error(err.message));
+  };
+
   changePassword = async newPassword => {
     let token = null;
     try {
@@ -171,15 +192,16 @@ class App extends React.Component {
     return this.state.loading ? (
       <SplashScreen />
     ) : (
-      <PublicNavs
-        noToken={this.state.noToken}
-        loginUser={this.loginUser}
-        registerNewUser={this.registerNewUser}
-        logoutUser={this.logoutUser}
-        changePassword={this.changePassword}
-        scans={this.state.scans}
-      />
-    );
+        <PublicNavs
+          noToken={this.state.noToken}
+          loginUser={this.loginUser}
+          registerNewUser={this.registerNewUser}
+          logoutUser={this.logoutUser}
+          changePassword={this.changePassword}
+          deleteUser={this.deleteUser}
+          scans={this.state.scans}
+        />
+      );
   }
 }
 
