@@ -10,6 +10,7 @@ class App extends React.Component {
 
     this.state = {
       scans: {},
+      userData: {},
       noToken: true,
       loading: true
     };
@@ -84,6 +85,8 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
+        const userData = { email: res.user.email, name: res.user.name }
+        this.getUserDate(userData)
         this.clearToken("token");
         this.setToken(res.user.token);
         this.getScans(res.user.token);
@@ -96,6 +99,15 @@ class App extends React.Component {
     this.clearToken("token");
     this.checkIfTokenExists();
   };
+
+  getUserDate = data => {
+    if (data) {
+      this.setState(state => {
+        state.userData = data
+        return state
+      })
+    }
+  }
 
   registerNewUser = async data => {
     fetch(`http://${DOMAIN}:8080/api/register`, {
@@ -111,6 +123,8 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
+        const userData = { email: res.user.email, name: res.user.name }
+        this.getUserDate(userData)
         this.setToken(res.user.token);
         this.getScans(res.user.token);
         this.checkIfTokenExists();
@@ -141,7 +155,7 @@ class App extends React.Component {
         this.clearToken("token");
         this.setToken(res.user.token);
         this.checkIfTokenExists();
-        console.log('Password Changed to: ', NewPassword)
+        console.log('Password Changed to: ', newPassword)
       })
       .catch(err => console.error(err.message));
   };
@@ -157,7 +171,6 @@ class App extends React.Component {
       .then(res => res.json())
       .then(res => {
         const data = res;
-        console.log(data);
         this.setState(state => {
           state.scans = data;
           state.loading = false;
@@ -171,15 +184,16 @@ class App extends React.Component {
     return this.state.loading ? (
       <SplashScreen />
     ) : (
-      <PublicNavs
-        noToken={this.state.noToken}
-        loginUser={this.loginUser}
-        registerNewUser={this.registerNewUser}
-        logoutUser={this.logoutUser}
-        changePassword={this.changePassword}
-        scans={this.state.scans}
-      />
-    );
+        <PublicNavs
+          noToken={this.state.noToken}
+          userData={this.state.userData}
+          loginUser={this.loginUser}
+          registerNewUser={this.registerNewUser}
+          logoutUser={this.logoutUser}
+          changePassword={this.changePassword}
+          scans={this.state.scans}
+        />
+      );
   }
 }
 

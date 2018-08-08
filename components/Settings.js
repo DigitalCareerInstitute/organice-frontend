@@ -102,8 +102,8 @@ class Settings extends React.Component {
       <View style={styles.main}>
         <View style={styles.avatar}>
           <View>
-            <Text style={styles.avatarName}>Peter Parker</Text>
-            <Text style={styles.avatarEmail}>PeterParker@mail.com</Text>
+            <Text style={styles.avatarName}>{this.props.screenProps.userData.name}</Text>
+            <Text style={styles.avatarEmail}>{this.props.screenProps.userData.email}</Text>
           </View>
           <SvgUri
             width="60"
