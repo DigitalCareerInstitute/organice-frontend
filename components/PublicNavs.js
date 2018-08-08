@@ -15,7 +15,8 @@ class PublicNavs extends React.Component {
             scans: this.props.scans,
             logoutUser: this.props.logoutUser,
             changePassword: this.props.changePassword,
-            deleteUser: this.props.deleteUser
+            deleteUser: this.props.deleteUser,
+            userData: this.props.userData,
           }}
         />
       );
