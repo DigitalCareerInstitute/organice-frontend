@@ -188,7 +188,7 @@ class ListView extends React.Component {
     const filteredList = this.state.scans.length > 1 ? this.state.scans.filter(
       item =>
         item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
-        item.content.toLowerCase().includes(this.state.search.toLowerCase())
+        (item.content ? item.content.toLowerCase().includes(this.state.search.toLowerCase()) : false)
     ) : this.state.scans;
     return (
       <View style={styles.background}>
@@ -232,6 +232,8 @@ class ListView extends React.Component {
               iconPath = require("../icons/label_car_insurance.svg");
             } else if (item.category === "health") {
               iconPath = require("../icons/label_health.svg");
+            } else {
+              iconPath = require("../icons/label_health.svg");
             }
 
             return (
@@ -240,7 +242,7 @@ class ListView extends React.Component {
                   style={styles.listInnerContainer}
                   // TODO  pass ID per props to the single view
 
-                  onPress={() => this.props.navigation.navigate("singleView")}
+                  onPress={() => this.props.navigation.navigate("singleView", { name: 'Jane' })}
                 >
                   <View style={{ alignSelf: "center", padding: 10 }}>
                     <SvgUri width={40} height={40} source={iconPath} />
@@ -252,8 +254,8 @@ class ListView extends React.Component {
                         justifyContent: "space-between"
                       }}
                     >
-                      <Text style={styles.listItemTitle}>{item.user}</Text>
-                      <Text style={styles.listItemDate}>{item.title}</Text>
+                      <Text style={styles.listItemTitle}>{item.title}</Text>
+                      <Text style={styles.listItemDate}>{item.content}</Text>
                     </View>
                     <View>
                       <Text style={styles.listItemDescription}>

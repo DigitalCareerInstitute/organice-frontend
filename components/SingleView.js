@@ -1,4 +1,5 @@
 import React from "react";
+import { DOMAIN } from "react-native-dotenv";
 import {
 	StyleSheet,
 	Text,
@@ -44,8 +45,10 @@ class SingleView extends React.Component {
 	}
 
 	componentWillMount() {
+		console.log('this.props', this.props);
+		
 		//10.0.2.2
-		fetch(`http://10.0.1.34:8080/api/scans/5b6030198b24ff167c8e5eea`, {
+		fetch(`http://${DOMAIN}:8080/api/scans/5b6030198b24ff167c8e5eea`, {
 			method: "get",
 			headers: new Headers({
 				Authorization:
