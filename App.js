@@ -153,7 +153,30 @@ class App extends React.Component {
       .catch(err => console.error(err.message));
   };
 
-  changePassword = async newPassword => {
+  changePassword = async (passwords) => {
+    fetch(`http://${DOMAIN}:8080/api/login`, {
+      method: "post",
+      headers: new Headers({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({
+        email: `${this.state.userData.email}`,
+        password: `${passwords.oldPassword}`
+      })
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.user !== null) {
+          this.saveNewPassword(passwords.newPassword)
+        } else {
+          console.log('you entered a wrong password')
+        }
+      })
+      .catch(err => console.error(err.message));
+
+  }
+
+  saveNewPassword = async newPassword => {
     let token = null;
     try {
       token = await AsyncStorage.getItem("token");
@@ -172,7 +195,6 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
-        console.log(res);
         this.clearToken("token");
         this.setToken(res.user.token);
         this.checkIfTokenExists();
