@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Constants, Camera, Permissions, FileSystem } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { DOMAIN } from "react-native-dotenv";
+
 import { AsyncStorage } from "react-native";
 const flashModeOrder = {
   off: "on",
@@ -156,7 +157,7 @@ class Scan extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        alert(JSON.stringify(data.scan.recognizedText.text));
+        alert(JSON.stringify(data));
       })
       .catch(err => {
         console.log(err);

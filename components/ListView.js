@@ -103,7 +103,7 @@ class ListView extends React.Component {
     super(props);
     // use 'this.props.screenProps.scans' if you want to get the scans.
     this.state = {
-      scans: this.props.screenProps.scans,
+      scans: this.props.screenProps.scans.scans,
       loading: true,
       modalSorting: false,
       sort: "category",
@@ -184,7 +184,7 @@ class ListView extends React.Component {
 
 
   render() {
-    console.log(this.state.scans)
+    console.log(this.state.scans )
     const filteredList = this.state.scans.length > 1 ? this.state.scans.filter(
       item =>
         item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
@@ -219,7 +219,7 @@ class ListView extends React.Component {
         {/* {console.log("DATA", data)} */}
         <FlatList
           data={filteredList}
-          extraData={this.state}
+          extraData={this.state.scans}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             let iconPath;
@@ -252,12 +252,12 @@ class ListView extends React.Component {
                         justifyContent: "space-between"
                       }}
                     >
-                      <Text style={styles.listItemTitle}>{item.scans.scans[0].user}</Text>
-                      <Text style={styles.listItemDate}>{item.scans.scans[0].title}</Text>
+                      <Text style={styles.listItemTitle}>{item.user}</Text>
+                      <Text style={styles.listItemDate}>{item.title}</Text>
                     </View>
                     <View>
                       <Text style={styles.listItemDescription}>
-                        {item.scans.scans[0].recognizedText}
+                        {/* {item.scans.scans[0].recognizedText} */}
                       </Text>
                     </View>
                   </View>
@@ -265,7 +265,7 @@ class ListView extends React.Component {
               </View>
             );
           }}
-          keyExtractor={item => item.scans.user._id}
+          keyExtractor={item => item.user._id}
         />
         <View>
           <Modal
