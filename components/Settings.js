@@ -154,7 +154,7 @@ class ChangePassword extends React.Component {
 
   submit = () => {
     const passwords = {
-      password: this.password,
+      oldPassword: this.password,
       newPassword: this.newPassword,
       reNewPassword: this.reNewPassword
     }
@@ -162,7 +162,7 @@ class ChangePassword extends React.Component {
       this.props.screenProps.changePassword(passwords);
       this.props.navigation.navigate("settings")
     } else {
-      console.log("the new passwords don't match")
+      alert("the new passwords don't match")
     }
   };
 

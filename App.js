@@ -18,6 +18,7 @@ class App extends React.Component {
 
   componentWillMount() {
     this.checkIfTokenExists();
+    this.checkIfUserDataExists();
   }
 
   componentDidMount() {
@@ -31,6 +32,28 @@ class App extends React.Component {
       state.loading = false;
       return state;
     });
+  };
+
+  checkIfUserDataExists = async () => {
+    try {
+      const name = await AsyncStorage.getItem("userName");
+      const email = await AsyncStorage.getItem("userEmail");
+      const userData = { name, email }
+      if (userData !== null) {
+        this.setState(state => {
+          state.userData = userData;
+          return state;
+        });
+      } else {
+        console.log('No user Data', userData)
+        this.setState(state => {
+          state.noToken = true;
+          return state;
+        });
+      }
+    } catch (err) {
+      console.error(error.message);
+    }
   };
 
   checkIfTokenExists = async () => {
@@ -100,8 +123,12 @@ class App extends React.Component {
     this.checkIfTokenExists();
   };
 
-  getUserData = data => {
+  getUserData = async (data) => {
     if (data) {
+      try {
+        await AsyncStorage.setItem("userName", data.name);
+        await AsyncStorage.setItem("userEmail", data.email);
+      } catch (err) { console.error(err) }
       this.setState(state => {
         state.userData = data
         return state
@@ -166,10 +193,10 @@ class App extends React.Component {
     })
       .then(res => res.json())
       .then(res => {
-        if (res.user !== null) {
+        if (res.user !== false) {
           this.saveNewPassword(passwords.newPassword)
         } else {
-          console.log('you entered a wrong password')
+          alert('you entered a wrong password')
         }
       })
       .catch(err => console.error(err.message));
