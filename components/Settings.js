@@ -149,13 +149,20 @@ class Settings extends React.Component {
 
 class ChangePassword extends React.Component {
   password = React.createRef();
-  newPass = React.createRef();
-  reNewPass = React.createRef();
+  newPassword = React.createRef();
+  reNewPassword = React.createRef();
 
   submit = () => {
-    if (this.newPass === this.reNewPass) {
-      this.props.screenProps.changePassword(this.newPass);
+    const passwords = {
+      oldPassword: this.password,
+      newPassword: this.newPassword,
+      reNewPassword: this.reNewPassword
+    }
+    if (this.newPassword === this.reNewPassword) {
+      this.props.screenProps.changePassword(passwords);
       this.props.navigation.navigate("settings")
+    } else {
+      alert("the new passwords don't match")
     }
   };
 
@@ -174,7 +181,7 @@ class ChangePassword extends React.Component {
           onChangeText={e => (this.password = e)}
         />
         <TextInput
-          ref={this.newPass}
+          ref={this.newPassword}
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
@@ -182,10 +189,10 @@ class ChangePassword extends React.Component {
           textContentType="password"
           selectTextOnFocus={true}
           secureTextEntry={true}
-          onChangeText={e => (this.newPass = e)}
+          onChangeText={e => (this.newPassword = e)}
         />
         <TextInput
-          ref={this.reNewPass}
+          ref={this.reNewPassword}
           style={styles.input}
           underlineColorAndroid="transparent"
           placeholderTextColor="#484848"
@@ -193,7 +200,7 @@ class ChangePassword extends React.Component {
           textContentType="password"
           selectTextOnFocus={true}
           secureTextEntry={true}
-          onChangeText={e => (this.reNewPass = e)}
+          onChangeText={e => (this.reNewPassword = e)}
         />
         <TouchableOpacity
           style={styles.passwordBtn}
