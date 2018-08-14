@@ -44,47 +44,25 @@ class SingleView extends React.Component {
 		};
 	}
 
-	componentWillMount() {
-		console.log('this.props', this.props);
-		
-		//10.0.2.2
-		fetch(`http://${DOMAIN}:8080/api/scans/5b6030198b24ff167c8e5eea`, {
-			method: "get",
-			headers: new Headers({
-				Authorization:
-					"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hamRAZXhhbXBsZS5jb20iLCJpZCI6IjViNjAyZjI2OGIyNGZmMTY3YzhlNWVlOSIsImlhdCI6MTUzMzAzMDE4Mn0.VdQNyI_hcZP_gzO8Jdi1awET53wEcZcnbpULQE_CZao"
-			})
-		})
-			.then(res => res.json())
-			.then(res => {
-				const data = res;
-				this.setState(state => {
-					state.data = data;
-					state.loading = false;
-					return state;
-				});
-				return data;
-			})
-			.catch(err => console.error(err));
-	}
 	render() {
-		console.log(this.state.data);
+		console.log(this.props.navigation.state.params.item)
 		return this.state.loading ? (
-			<View>
-				<Text>LOADING ....</Text>
+			<View style={{ padding: 10 }}>
+				<Text style={styles.title}>{this.props.navigation.state.params.item.title}</Text>
+				<Text style={styles.date}>{this.props.navigation.state.params.item.title}</Text>
+				<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
+				<Image
+					style={styles.image}
+					source={{
+						uri:
+							"https://facebook.github.io/react-native/docs/assets/favicon.png"
+					}}
+				/>
 			</View>
 		) : (
-				<View style={{ padding: 10 }}>
-					<Text style={styles.title}>{this.state.data.scan.title}</Text>
-					<Text style={styles.date}>{this.state.data.scan.date}</Text>
-					<Text style={styles.content}>{this.state.data.scan.content}</Text>
-					<Image
-						style={styles.image}
-						source={{
-							uri:
-								"https://facebook.github.io/react-native/docs/assets/favicon.png"
-						}}
-					/>
+
+				<View>
+					<Text>LOADING ....</Text>
 				</View>
 			);
 	}

@@ -103,7 +103,7 @@ class ListView extends React.Component {
     super(props);
     // use 'this.props.screenProps.scans' if you want to get the scans.
     this.state = {
-      scans: this.props.screenProps.scans.scans,
+      scans: this.props.screenProps.scans.scans || [],
       loading: true,
       modalSorting: false,
       sort: "category",
@@ -177,14 +177,13 @@ class ListView extends React.Component {
   // componentWillMount() {
   //   this.setState(state => {
   //     state.scans = this.props.screenProps.scans
-  //     console.log(this.state.scans)
-  //     return state
+  //     console.log(this.state.scan
   //   })
   // }
 
 
   render() {
-    console.log(this.state.scans )
+    // console.log(this.state.scans)
     const filteredList = this.state.scans.length > 1 ? this.state.scans.filter(
       item =>
         item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
@@ -242,7 +241,7 @@ class ListView extends React.Component {
                   style={styles.listInnerContainer}
                   // TODO  pass ID per props to the single view
 
-                  onPress={() => this.props.navigation.navigate("singleView", { name: 'Jane' })}
+                  onPress={() => this.props.navigation.navigate("singleView", { item })}
                 >
                   <View style={{ alignSelf: "center", padding: 10 }}>
                     <SvgUri width={40} height={40} source={iconPath} />
@@ -267,7 +266,7 @@ class ListView extends React.Component {
               </View>
             );
           }}
-          keyExtractor={item => item.user._id}
+          keyExtractor={item => item.title}
         />
         <View>
           <Modal
