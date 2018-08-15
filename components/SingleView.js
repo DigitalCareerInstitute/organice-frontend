@@ -11,9 +11,15 @@ import SvgUri from "react-native-svg-uri";
 import { data } from "../db.js";
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 	image: {
-		width: 300,
-		height: 300
+		width: 400,
+		height: 500,
 	},
 	content: {
 		fontSize: 16,
@@ -22,7 +28,8 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		fontSize: 20,
-		paddingTop: 10
+		paddingTop: 10,
+		color: "#ff7539"
 	},
 	date: {
 		fontSize: 20,
@@ -41,14 +48,14 @@ class SingleView extends React.Component {
 
 	render() {
 		const imageFile = this.props.navigation.state.params.item.image
-		console.log(imageFile)
+		// console.log(imageFile)
 		return this.state.loading ? (
-			<View style={{ padding: 10 }}>
+			<View style={styles.container}>
 				<Text style={styles.title}>{this.props.navigation.state.params.item.title}</Text>
 				<View>
 					<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
 				</View>
-				<View>
+				<View style={{ flex: 3 }}>
 					<Image
 						style={styles.image}
 						source={{ uri: `data:image/jpg;base64,${imageFile}` }}
