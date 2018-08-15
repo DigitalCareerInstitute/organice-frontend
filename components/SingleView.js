@@ -18,13 +18,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	image: {
-		width: 400,
-		height: 500,
+		marginBottom: 1,
+		width: 300,
+		height: 280,
 	},
 	content: {
-		fontSize: 16,
+		backgroundColor: '#fff',
+		width: 300,
+		height: 100,
 		paddingTop: 10,
-		paddingBottom: 10
+		marginBottom: 5,
+		marginTop: 5,
+		borderRadius: 10
 	},
 	title: {
 		fontSize: 20,
@@ -52,16 +57,16 @@ class SingleView extends React.Component {
 		return this.state.loading ? (
 			<View style={styles.container}>
 				<Text style={styles.title}>{this.props.navigation.state.params.item.title}</Text>
-				<View>
-					<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
-				</View>
-				<View style={{ flex: 3 }}>
-					<Image
-						style={styles.image}
-						source={{ uri: `data:image/jpg;base64,${imageFile}` }}
-					/>
-				</View>
+
+				<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
+
+
+				<Image
+					style={styles.image}
+					source={{ uri: `data:image/jpg;base64,${imageFile}` }}
+				/>
 			</View>
+
 		) : (
 
 				<View>
