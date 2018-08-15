@@ -5,11 +5,6 @@ import {
 	Text,
 	View,
 	Image,
-	FlatList,
-	TouchableOpacity,
-	TouchableHighlight,
-	Modal,
-	TextInput
 } from "react-native";
 import { SearchBar, Icon } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
@@ -45,19 +40,20 @@ class SingleView extends React.Component {
 	}
 
 	render() {
-		console.log(this.props.navigation.state.params.item)
+		const imageFile = this.props.navigation.state.params.item.image
+		console.log(imageFile)
 		return this.state.loading ? (
 			<View style={{ padding: 10 }}>
 				<Text style={styles.title}>{this.props.navigation.state.params.item.title}</Text>
-				<Text style={styles.date}>{this.props.navigation.state.params.item.title}</Text>
-				<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
-				<Image
-					style={styles.image}
-					source={{
-						uri:
-							"https://facebook.github.io/react-native/docs/assets/favicon.png"
-					}}
-				/>
+				<View>
+					<Text style={styles.content}>{this.props.navigation.state.params.item.content}</Text>
+				</View>
+				<View>
+					<Image
+						style={styles.image}
+						source={{ uri: `data:image/jpg;base64,${imageFile}` }}
+					/>
+				</View>
 			</View>
 		) : (
 
