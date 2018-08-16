@@ -160,7 +160,7 @@ class Scan extends React.Component {
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        alert(JSON.stringify(data.scan.recognizedText.text));
+        alert(JSON.stringify(data.scan.content));
       })
       .catch(err => {
         console.log(err);
