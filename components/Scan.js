@@ -4,6 +4,9 @@ import { Constants, Camera, Permissions, FileSystem } from "expo";
 import { MaterialIcons } from "@expo/vector-icons";
 import { DOMAIN } from "react-native-dotenv";
 import { AsyncStorage } from "react-native";
+import SvgUri from "react-native-svg-uri";
+const test = require('../icons/git-cheat-sheet-large01.png')
+
 const flashModeOrder = {
   off: "on",
   on: "auto",
@@ -19,63 +22,61 @@ const flashIcons = {
 };
 
 const styles = StyleSheet.create({
-  btnText: {
-    color: "white",
-    textAlign: "center",
-    zIndex: 99999
-  },
-  preview: {
-    //zIndex: 99999,
-    position: "absolute",
-    top: "0%",
-    left: "10%",
-    bottom: "20%",
-    right: "10%",
-    borderRadius: 10,
-    backgroundColor: "rgba(255, 255, 55, 0.4)",
-    opacity: 0.8,
-    overflow: "hidden"
-  },
   noPermissions: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
     padding: 10
   },
-  toggleButton: {
-    flex: 0.25,
-    height: 40,
-    marginHorizontal: 2,
-    marginBottom: 10,
-    marginTop: 20,
+  btnText: {
+    color: "#fff",
+    fontSize: 20,
+    letterSpacing: 1,
+    backgroundColor: "#ff7539",
+    textAlign: "center",
+    padding: 7,
+    borderRadius: 7,
+    zIndex: 2
+  },
+  flashButton: {
+    marginTop: 45,
     padding: 5,
     alignItems: "center",
     justifyContent: "center"
   },
-  topBar: {
-    backgroundColor: "black",
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingTop: Constants.statusBarHeight / 4
-  },
-  bottomBar: {
-    height: 60,
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  bottomBarElements: {
-    height: 40
-  },
-  trigger: {
-    backgroundColor: "white",
-    width: 50,
-    height: 50,
-    borderRadius: 50 / 2
+  cameraContainer: {
+    flex: 1,
   },
   camera: {
-    flex: 1
+    height: '100%',
+    zIndex: 0
+  },
+  scanBtn: {
+    height: '85%',
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  preview: {
+    position: "absolute",
+    top: "0%",
+    left: "0%",
+    bottom: "0%",
+    right: "0%",
+    height: "100%",
+    overflow: 'hidden'
+  },
+  imgContainer: {
+    position: "relative",
+    height: "100%"
+  },
+  savedImg: {
+    flex: 1,
+    backgroundColor: "#fff",
+    zIndex: 99
+  },
+  savedImgBtn: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   }
 });
 
@@ -128,7 +129,10 @@ class Scan extends React.Component {
   accept = async () => {
     //// Manually set a valid token with:
     // await AsyncStorage.setItem("token", "YOUR.TOKEN.HERE");
-    const TOKEN = await AsyncStorage.getItem("token");
+    let TOKEN = null
+    try {
+      TOKEN = await AsyncStorage.getItem("token");
+    } catch (err) { console.log(err) }
 
     if (!TOKEN) {
       alert("not autenticated");
@@ -140,7 +144,6 @@ class Scan extends React.Component {
       type: "image/jpeg",
       name: "photo.jpg"
     };
-
     var body = new FormData();
     body.append("date", Date.now());
     body.append("image", photo);
@@ -156,6 +159,7 @@ class Scan extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
+        console.log(data)
         alert(JSON.stringify(data.scan.recognizedText.text));
       })
       .catch(err => {
@@ -178,28 +182,16 @@ class Scan extends React.Component {
     if (hasCameraPermission === null) {
       return (
         <View style={styles.noPermissions}>
-          <Text style={{ color: "black" }}>
+          <Text style={{ color: "#fff" }}>
             Camera permissions not granted - cannot open camera preview.
           </Text>
         </View>
       );
     } else if (hasCameraPermission === false) {
-      return <Text>No access to camera</Text>;
+      return <Text>Please allow access to the camera</Text>;
     } else {
       return (
-        <View style={{ flex: 1 }}>
-          <View style={styles.topBar}>
-            <TouchableOpacity
-              style={styles.toggleButton}
-              onPress={this.toggleFlash}
-            >
-              <MaterialIcons
-                name={flashIcons[this.state.flash]}
-                size={32}
-                color="white"
-              />
-            </TouchableOpacity>
-          </View>
+        <View style={styles.cameraContainer}>
           <Camera
             ref={ref => {
               this.camera = ref;
@@ -211,16 +203,23 @@ class Scan extends React.Component {
             ratio={this.state.ratio}
             pictureSize={this.state.pictureSize}
           >
+            <TouchableOpacity
+              style={styles.flashButton}
+              onPress={this.toggleFlash}
+            >
+              <MaterialIcons
+                name={flashIcons[this.state.flash]}
+                size={32}
+                color="#ff7539"
+              />
+            </TouchableOpacity>
             <PreviewShot
               accept={this.accept}
               decline={this.decline}
               lastShotURI={this.state.lastShotURI}
             />
-            {/* TODO This is pretty hacky */}
-            <View style={{ flex: 1 }} pointerEvents="none" />
-            <View style={styles.bottomBar}>
-              <Trigger snap={this.snap} style={styles.bottomBarElements} />
-              <Settings style={styles.bottomBarElements} />
+            <View style={styles.scanBtn}>
+              <Trigger snap={this.snap} />
             </View>
           </Camera>
         </View>
@@ -229,17 +228,12 @@ class Scan extends React.Component {
   }
 }
 
-class Settings extends React.Component {
-  render() {
-    return <View style={this.props.style} />;
-  }
-}
 
 class Trigger extends React.Component {
   render() {
     return (
-      <TouchableOpacity style={this.props.StyleSheet} onPress={this.props.snap}>
-        <View style={styles.trigger} />
+      <TouchableOpacity onPress={this.props.snap}>
+        <SvgUri width={55} height={55} source={require('../icons/camera.svg')} />
       </TouchableOpacity>
     );
   }
@@ -257,37 +251,29 @@ class PreviewShot extends React.Component {
     return (
       <View style={styles.preview}>
         {this.props.lastShotURI ? (
-          <View style={{ position: "relative", height: "100%" }}>
+          <View style={styles.imgContainer}>
             <Image
               source={{ uri: this.props.lastShotURI }}
-              style={{ flex: 6, backgroundColor: "pink", zIndex: -1 }}
+              style={styles.savedImg}
             />
-            {/*<View style={{ height: "10%", backgroundColor: 'white', zIndex: 999999999 }}>
-                  <Text style={styles.btnText}>Accept</Text>
-                </View>
-                */}
-            <View style={{ flex: 1, flexDirection: "row", display: "flex" }}>
+            <View style={styles.savedImgBtn}>
               <TouchableOpacity
                 style={{
-                  flex: 1,
-                  padding: 10,
-                  height: "50%",
-                  backgroundColor: "rgba(255, 255, 55, 0.1)"
+                  padding: 5,
+                  marginLeft: 45
                 }}
                 onPress={this.props.decline}
               >
-                <Text style={styles.btnText}>Take another</Text>
+                <Text style={styles.btnText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
-                  flex: 1,
-                  padding: 10,
-                  height: "50%",
-                  backgroundColor: "rgba(255, 255, 55, 0.1)"
+                  padding: 5,
+                  marginRight: 55
                 }}
                 onPress={this.props.accept}
               >
-                <Text style={styles.btnText}>Accept</Text>
+                <Text style={styles.btnText}>Save</Text>
               </TouchableOpacity>
             </View>
           </View>
