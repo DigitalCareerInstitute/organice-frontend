@@ -3,15 +3,18 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   FlatList,
   TouchableOpacity,
   TouchableHighlight,
   Modal,
   TextInput
 } from "react-native";
+import SingleView from "./SingleView";
+import { createStackNavigator } from "react-navigation";
 import { SearchBar, Icon } from "react-native-elements";
 import SvgUri from "react-native-svg-uri";
-import { data } from "../db.js";
+// import { data } from "../db.js";
 
 const styles = StyleSheet.create({
   background: {
@@ -100,13 +103,13 @@ class ListView extends React.Component {
     super(props);
     // use 'this.props.screenProps.scans' if you want to get the scans.
     this.state = {
-      data,
+      scans: this.props.screenProps.scans.scans || [],
+      loading: true,
       modalSorting: false,
       sort: "category",
       search: ""
     };
   }
-
   static navigationOptions = {
     title: "List"
   };
@@ -117,12 +120,13 @@ class ListView extends React.Component {
 
   sortBy() {
     // console.log("sort", this.state.sort);
+    let localScans = this.state.scans;
     if (this.state.sort === "date") {
-      data.sort(function(a, b) {
+      localScans.sort(function (a, b) {
         return a.date - b.date;
       });
     } else if (this.state.sort === "title") {
-      data.sort(function compare(a, b) {
+      localScans.sort(function compare(a, b) {
         const titleA = a.title.toUpperCase().trim();
         const titleB = b.title.toUpperCase().trim();
 
@@ -135,7 +139,7 @@ class ListView extends React.Component {
         return comparison;
       });
     } else if (this.state.sort === "category") {
-      data.sort(function compare(a, b) {
+      localScans.sort(function compare(a, b) {
         const categoryA = a.category.toUpperCase().trim();
         const categoryB = b.category.toUpperCase().trim();
 
@@ -150,7 +154,7 @@ class ListView extends React.Component {
     }
 
     this.setState(state => {
-      state.data = data;
+      state.scans = localScans;
       return state;
     });
   }
@@ -169,12 +173,22 @@ class ListView extends React.Component {
     this.setState({ search });
   }
 
+
+  // componentWillMount() {
+  //   this.setState(state => {
+  //     state.scans = this.props.screenProps.scans
+  //     console.log(this.state.scan
+  //   })
+  // }
+
+
   render() {
-    const filteredList = this.state.data.filter(
+    // console.log(this.state.scans)
+    const filteredList = this.state.scans.length > 1 ? this.state.scans.filter(
       item =>
         item.title.toLowerCase().includes(this.state.search.toLowerCase()) ||
-        item.content.toLowerCase().includes(this.state.search.toLowerCase())
-    );
+        (item.content ? item.content.toLowerCase().includes(this.state.search.toLowerCase()) : false)
+    ) : this.state.scans;
     return (
       <View style={styles.background}>
         <SearchBar
@@ -204,7 +218,7 @@ class ListView extends React.Component {
         {/* {console.log("DATA", data)} */}
         <FlatList
           data={filteredList}
-          extraData={this.state}
+          extraData={this.state.scans}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             let iconPath;
@@ -217,11 +231,18 @@ class ListView extends React.Component {
               iconPath = require("../icons/label_car_insurance.svg");
             } else if (item.category === "health") {
               iconPath = require("../icons/label_health.svg");
+            } else {
+              iconPath = require("../icons/label_health.svg");
             }
 
             return (
               <View style={styles.listOuterContainer}>
-                <TouchableOpacity style={styles.listInnerContainer}>
+                <TouchableOpacity
+                  style={styles.listInnerContainer}
+                  // TODO  pass ID per props to the single view
+
+                  onPress={() => this.props.navigation.navigate("singleView", { item })}
+                >
                   <View style={{ alignSelf: "center", padding: 10 }}>
                     <SvgUri width={40} height={40} source={iconPath} />
                   </View>
@@ -233,11 +254,11 @@ class ListView extends React.Component {
                       }}
                     >
                       <Text style={styles.listItemTitle}>{item.title}</Text>
-                      <Text style={styles.listItemDate}>{item.date}</Text>
+                      <Text style={styles.listItemDate}>{item.content}</Text>
                     </View>
                     <View>
                       <Text style={styles.listItemDescription}>
-                        {item.content}
+                        {/* {item.scans.scans[0].recognizedText} */}
                       </Text>
                     </View>
                   </View>
@@ -245,7 +266,7 @@ class ListView extends React.Component {
               </View>
             );
           }}
-          keyExtractor={item => item._id}
+          keyExtractor={item => item.title}
         />
         <View>
           <Modal
@@ -267,7 +288,7 @@ class ListView extends React.Component {
                   }}
                 >
                   Sort By
-                </Text>
+								</Text>
 
                 <TouchableOpacity
                   onPress={() => {
@@ -285,7 +306,7 @@ class ListView extends React.Component {
                     }
                   >
                     Label
-                  </Text>
+									</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -303,7 +324,7 @@ class ListView extends React.Component {
                     }
                   >
                     Date
-                  </Text>
+									</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => {
@@ -321,7 +342,7 @@ class ListView extends React.Component {
                     }
                   >
                     Title
-                  </Text>
+									</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -332,4 +353,28 @@ class ListView extends React.Component {
   }
 }
 
-export default ListView;
+const SingleViewNavigator = createStackNavigator(
+  {
+    listView: {
+      screen: ListView,
+      title: "ListView",
+      navigationOptions: () => ({
+        header: null
+      })
+    },
+    singleView: {
+      screen: SingleView,
+      navigationOptions: () => ({
+        headerTitle: "Single View",
+        headerStyle: { backgroundColor: "#ff7539" },
+        headerTitleStyle: { color: "#f9f9f9" },
+        headerTintColor: "#f9f9f9"
+      })
+    }
+  },
+  {
+    headerMode: "float"
+  }
+);
+
+export default SingleViewNavigator;

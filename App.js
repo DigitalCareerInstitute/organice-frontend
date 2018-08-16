@@ -62,6 +62,7 @@ class App extends React.Component {
       if (token !== null) {
         this.setState(state => {
           state.noToken = false;
+          this.getScans(token)
           return state;
         });
       } else {
